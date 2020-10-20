@@ -1,0 +1,42 @@
+logging:
+  level:
+    root: INFO
+    kafka.*: WARN
+    org.springframework.*: INFO
+    org.apache.kafka.*: WARN
+
+server:
+  port: 8090
+
+spring:
+  application:
+    name: comment-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017
+      database: reactive-comment-service
+  cloud:
+    stream:
+      bindings:
+        article:
+          binder: kafka
+          destination: article
+          group: article-group
+          contentType: 'application/json'
+          consumer:
+            concurrency: 1
+      kafka:
+        binder:
+          brokers:
+            - localhost:9092
+
+spring-docs:
+  title: Comment-Service API
+  description:
+  version: 0.0.1
+  contact-name:
+  contact-url:
+  contact-email:
+  license: unlicensed
+  license-url:
+  servers:

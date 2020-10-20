@@ -1,0 +1,33 @@
+logging:
+  level:
+    root: INFO
+    kafka.*: WARN
+    org.springframework.*: INFO
+    org.apache.kafka.*: WARN
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: article-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017
+      database: reactive-articles-service
+  cloud:
+    stream:
+      bindings:
+        output:
+          binder: kafka
+          destination: article
+          contentType: 'application/json'
+          group: article-group
+      kafka:
+        binder:
+          brokers:
+            - localhost:9092
+
+article:
+  messaging:
+    timeout: 30000
