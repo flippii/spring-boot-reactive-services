@@ -8,7 +8,8 @@ import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
-import reactor.core.publisher.Mono;
+
+import static reactor.core.publisher.Mono.error;
 
 @Slf4j
 @Configuration
@@ -22,7 +23,7 @@ public class ArticleProcessor {
     public void apply(Message<ArticleEvent> articleEventMessage) {
         ArticleEvent articleEvent = articleEventMessage.getPayload();
 
-        log.trace("");
+        log.trace("Event received: {}", articleEvent);
 
         switch (articleEvent.getEventType()) {
             case ADDED -> addArticle(articleEvent);
@@ -32,13 +33,13 @@ public class ArticleProcessor {
 
     private void addArticle(ArticleEvent event) {
         articleRepository.save(new Article(event.getId(), event.getMessage().getSlug()))
-                .switchIfEmpty(Mono.error(new RuntimeException("Article not saved.")))
+                .switchIfEmpty(error(new RuntimeException("Article not saved.")))
                 .subscribe();
     }
 
     private void deleteArticle(ArticleEvent event) {
         articleRepository.deleteById(event.getId())
-                .switchIfEmpty(Mono.error(new RuntimeException("Article not deleted.")))
+                .switchIfEmpty(error(new RuntimeException("Article not deleted.")))
                 .subscribe();
     }
 

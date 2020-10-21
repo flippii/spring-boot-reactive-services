@@ -6,14 +6,12 @@ import com.spring.boot.example.article.model.ArticleDto;
 import com.spring.boot.example.core.web.error.DocumentNotFoundException;
 import com.spring.boot.example.core.web.error.ValidationException;
 import lombok.RequiredArgsConstructor;
-import org.reactivestreams.Publisher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.web.reactive.function.server.ServerResponse.ok;
+import static com.spring.boot.example.core.web.HandlerFunctions.readResponse;
 import static reactor.core.publisher.Mono.error;
 
 @Component
@@ -29,7 +27,7 @@ public class ArticleApiHandler {
         Mono<Article> articleMono = articleService.getBySlug(slug)
                 .switchIfEmpty(error(new DocumentNotFoundException("Article with slug \"" + slug + "\" not found.")));
 
-        return readResponse(articleMono);
+        return readResponse(articleMono, Article.class);
     }
 
     public Mono<ServerResponse> update(ServerRequest request) {
@@ -46,7 +44,7 @@ public class ArticleApiHandler {
                 .flatMap(articleDto -> articleService.update(slug, articleDto))
                 .switchIfEmpty(error(new DocumentNotFoundException("Can't update article with slug \"" + slug + "\".")));
 
-        return readResponse(articleMono);
+        return readResponse(articleMono, Article.class);
     }
 
     public Mono<ServerResponse> delete(ServerRequest request) {
@@ -55,13 +53,7 @@ public class ArticleApiHandler {
         Mono<Article> articleMono = articleService.delete(slug)
                 .switchIfEmpty(error(new DocumentNotFoundException("Can't delete article with slug \"" + slug + "\".")));
 
-        return readResponse(articleMono);
-    }
-
-    private static Mono<ServerResponse> readResponse(Publisher<Article> publisher) {
-        return ok()
-                .contentType(APPLICATION_JSON)
-                .body(publisher, Article.class);
+        return readResponse(articleMono, Article.class);
     }
 
 }

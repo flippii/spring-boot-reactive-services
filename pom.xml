@@ -30,6 +30,7 @@
         <module>core-module-starter</module>
         <module>article-service</module>
         <module>comment-service</module>
+        <module>favourite-service</module>
     </modules>
 
     <dependencyManagement>

@@ -16,9 +16,11 @@ public class Comment extends AbstractAuditingDocument<String> {
     @Id
     private String id;
     private String body;
+    private String articleId;
 
-    public Comment(String body) {
+    public Comment(String body, String articleId) {
         this.body = body;
+        this.articleId = articleId;
     }
 
 }

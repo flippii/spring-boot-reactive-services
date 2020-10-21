@@ -31,20 +31,25 @@ public class CommentConfiguration {
 
     @Bean
     @RouterOperations({
-            @RouterOperation(path = "/api/comments", beanClass = CommentApiHandler.class, beanMethod = "comments", method = GET,
+            @RouterOperation(path = "/api/articles/{slug}/comments", beanClass = CommentApiHandler.class, beanMethod = "comments", method = GET,
                     operation = @Operation(operationId = "comments",
+                            parameters = { @Parameter(in = ParameterIn.PATH, name = "slug", description = "Article Slug") },
                             responses = { @ApiResponse(content = { @Content(schema = @Schema(anyOf = CommentDto.class))})
                     }
             )),
-            @RouterOperation(path = "/api/comments", beanClass = CommentApiHandler.class, beanMethod = "create", method = POST,
+            @RouterOperation(path = "/api/articles/{slug}/comments", beanClass = CommentApiHandler.class, beanMethod = "create", method = POST,
                    operation = @Operation(operationId = "create",
+                           parameters = { @Parameter(in = ParameterIn.PATH, name = "slug", description = "Article Slug") },
                            requestBody = @RequestBody(required = true, content = { @Content(schema = @Schema(implementation = CommentDto.class)) }),
                            responses = { @ApiResponse(content = { @Content(schema = @Schema()) })
                    }
             )),
-            @RouterOperation(path = "/api/comments/{id}", beanClass = CommentApiHandler.class, beanMethod = "delete", method = DELETE,
+            @RouterOperation(path = "/api/articles/{slug}/comments/{id}", beanClass = CommentApiHandler.class, beanMethod = "delete", method = DELETE,
                    operation = @Operation(operationId = "delete",
-                           parameters = { @Parameter(in = ParameterIn.PATH, name = "id", description = "Comment Id") },
+                           parameters = {
+                                    @Parameter(in = ParameterIn.PATH, name = "slug", description = "Article Slug"),
+                                    @Parameter(in = ParameterIn.PATH, name = "id", description = "Comment Id")
+                           },
                            responses = { @ApiResponse(content = { @Content(schema = @Schema(implementation = CommentDto.class)) })
                    }
             ))
@@ -57,7 +62,7 @@ public class CommentConfiguration {
                         .DELETE("/{id}", commentApiHandler::delete))
                 .build();
 
-        return route().path("/api/comments", () -> json)
+        return route().path("/api/articles/{slug}/comments", () -> json)
                 .build();
     }
 
@@ -65,7 +70,7 @@ public class CommentConfiguration {
     public GroupedOpenApi commentsOpenApi() {
         return GroupedOpenApi.builder()
                 .group("comments")
-                .pathsToMatch(new String[] { "/api/comments/**" })
+                .pathsToMatch(new String[] { "/api/articles/**" })
                 .build();
     }
 

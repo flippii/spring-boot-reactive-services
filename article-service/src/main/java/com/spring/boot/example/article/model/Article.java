@@ -8,6 +8,12 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,12 +27,18 @@ public class Article extends AbstractAuditingDocument<String> {
     private String title;
     private String description;
     private String body;
+    private List<Tag> tags;
 
-    public Article(String title, String description, String body) {
+    public Article(String title, String description, String body, String[] tagList) {
         this.slug = toSlug(title);
         this.title = title;
         this.description = description;
         this.body = body;
+        this.tags = Arrays.stream(tagList)
+                .collect(toSet())
+                .stream()
+                .map(Tag::new)
+                .collect(toList());
     }
 
     private String toSlug(String title) {

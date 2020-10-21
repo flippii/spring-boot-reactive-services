@@ -4,8 +4,10 @@ import com.spring.boot.example.core.domain.DomainEvent;
 import com.spring.boot.example.core.domain.EventType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @Getter
+@ToString
 @RequiredArgsConstructor
 public class ArticleEvent implements DomainEvent<String> {
 
@@ -14,6 +16,7 @@ public class ArticleEvent implements DomainEvent<String> {
     private final Message message;
 
     @Getter
+    @ToString
     @RequiredArgsConstructor
     public static class Message {
 

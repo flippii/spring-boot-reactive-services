@@ -1,0 +1,17 @@
+logging:
+  level:
+    root: INFO
+    kafka.*: WARN
+    org.springframework.*: INFO
+    org.apache.kafka.*: WARN
+
+server:
+  port: 8070
+
+spring:
+  application:
+    name: favourite-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017
+      database: reactive-favourite-service
