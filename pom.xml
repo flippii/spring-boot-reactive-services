@@ -23,6 +23,7 @@
         <spring-cloud.version>Hoxton.RELEASE</spring-cloud.version>
         <java-fluent-validator.version>1.9.1</java-fluent-validator.version>
         <springdoc-openapi-webflux-ui.version>1.4.8</springdoc-openapi-webflux-ui.version>
+        <jjwt-api.version>0.11.0</jjwt-api.version>
     </properties>
 
     <modules>
@@ -31,6 +32,8 @@
         <module>article-service</module>
         <module>comment-service</module>
         <module>favourite-service</module>
+        <module>feed-service</module>
+        <module>user-service</module>
     </modules>
 
     <dependencyManagement>
@@ -53,6 +56,22 @@
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-webflux-ui</artifactId>
                 <version>${springdoc-openapi-webflux-ui.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${jjwt-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jjwt-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>${jjwt-api.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

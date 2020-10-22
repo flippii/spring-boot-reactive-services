@@ -1,11 +1,16 @@
 package com.spring.boot.example.article;
 
 import com.spring.boot.example.article.model.Article;
+import com.spring.boot.example.article.model.Tag;
 import com.spring.boot.example.core.initializer.DataInitializer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
+
+import java.util.Arrays;
+
+import static java.util.stream.Collectors.toSet;
 
 @Slf4j
 @Component
@@ -50,7 +55,7 @@ public class ArticleDataInitializer implements DataInitializer {
     }
 
     private Article createArticle(String title, String description, String[] tags) {
-        return new Article(title, description, "", tags);
+        return new Article(title, description, "", Arrays.stream(tags).map(Tag::new).collect(toSet()));
     }
 
 }

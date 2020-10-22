@@ -5,21 +5,21 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@Accessors(chain = true)
 @Document(collection = "articles")
 public class Article extends AbstractAuditingDocument<String> {
+
+    private static final String SLUG_PATTERN = "[\\&|[\\uFE30-\\uFFA0]|\\’|\\”|\\s\\?\\,\\.]+";
 
     @Id
     private String id;
@@ -27,22 +27,18 @@ public class Article extends AbstractAuditingDocument<String> {
     private String title;
     private String description;
     private String body;
-    private List<Tag> tags;
+    private Set<Tag> tags;
 
-    public Article(String title, String description, String body, String[] tagList) {
+    public Article(String title, String description, String body, Set<Tag> tags) {
         this.slug = toSlug(title);
         this.title = title;
         this.description = description;
         this.body = body;
-        this.tags = Arrays.stream(tagList)
-                .collect(toSet())
-                .stream()
-                .map(Tag::new)
-                .collect(toList());
+        this.tags = tags;
     }
 
     private String toSlug(String title) {
-        return title.toLowerCase().replaceAll("[\\&|[\\uFE30-\\uFFA0]|\\’|\\”|\\s\\?\\,\\.]+", "-");
+        return title.toLowerCase().replaceAll(SLUG_PATTERN, "-");
     }
 
 }

@@ -1,14 +1,18 @@
 # TODO
-* spring cloud stream zum sync. der Daten
 * Logging:
-** Mongo DB
-** webflux
+  * Mongo DB
+  * webflux
+* MessageService -> Translations  
 * ReactiveMongoOperations umstellen oder @Query nutzen
-** Article -> Tags Aggregation nutzen
+  * Article -> Tags Aggregation nutzen
 * Web-Client zur Kommunikation zw. den Services?
-** Basic Auth
+  * Feed Service macht den call zum Article Service -> Details
+  * Basic Auth
+* Service Discovery - Consul + Config Management  
 * OAuth2 Security einziehen
-** zuerst mit Okta - dann auf Keycloak umstellen.
-** Messaging Security
+  * zuerst mit Okta - dann auf Keycloak umstellen.
+  * Messaging Security
+  * Prüfung ob der Benutzer den Article löschen, bearbeiten ... kann
 * Mongo DB 4.x + Transactions
 * Reactive Unit Tests implementieren
+* ReactiveUserDetailsPasswordService -> Wo init. wird es ind er Auto Configuration?

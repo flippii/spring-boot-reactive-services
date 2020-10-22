@@ -23,6 +23,7 @@ public class ArticleConfiguration {
         RouterFunction<ServerResponse> json = route()
                 .nest(accept(APPLICATION_JSON), builder -> builder
                         .GET("/{slug}", articleApiHandler::article)
+                        .POST("/", articleApiHandler::create)
                         .PUT("/{slug}", contentType(APPLICATION_JSON), articleApiHandler::update)
                         .DELETE("/{slug}", articleApiHandler::delete))
                 .build();

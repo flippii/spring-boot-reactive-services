@@ -18,27 +18,27 @@ public abstract class AbstractDomainListener<T, E> extends AbstractMongoEventLis
 
     @Override
     public final void onAfterSave(AfterSaveEvent<T> event) {
-        E domainEvent = createAddedEvent(event.getSource());
+        DomainEvent<E> domainEvent = createAddedEvent(event.getSource());
 
         log.trace("Send domain event: {}", domainEvent);
 
         sendDomainEvent(domainEvent);
     }
 
-    protected abstract E createAddedEvent(T document);
+    protected abstract DomainEvent<E> createAddedEvent(T document);
 
     @Override
     public final void onAfterDelete(AfterDeleteEvent<T> event) {
-        E domainEvent = createRemoveEvent(event.getSource());
+        DomainEvent<E> domainEvent = createRemoveEvent(event.getSource());
 
         log.trace("Send domain event: {}", domainEvent);
 
         sendDomainEvent(domainEvent);
     }
 
-    protected abstract E createRemoveEvent(Document document);
+    protected abstract DomainEvent<E> createRemoveEvent(Document document);
 
-    private void sendDomainEvent(E event) {
+    private void sendDomainEvent(DomainEvent<E> event) {
         messageBroker.output()
                 .send(MessageBuilder.withPayload(event).build(), timeOut);
     }
