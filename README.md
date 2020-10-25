@@ -1,3 +1,13 @@
+# Getting started
+
+You need Docker and Java 15 installed.
+	
+	docker-compose up -d
+
+Then run every Spring Boot app.
+
+    ./mvn spring-boot:run
+
 # TODO
 * Logging:
   * Mongo DB

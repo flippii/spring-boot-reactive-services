@@ -1,0 +1,340 @@
+{
+	"info": {
+		"_postman_id": "300ddc3b-7993-42e1-8cd7-5ad6db4ae5b6",
+		"name": "Reactive-Services",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Keycloak Admin-Cli",
+			"item": [
+				{
+					"name": "Get Token for Admin-Cli (Password)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "61519dc9-a417-4105-bb05-76821b1d3a1b",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"token\", jsonData.access_token);\r",
+									"postman.setEnvironmentVariable(\"refresh_token\", jsonData.refresh_token);\r",
+									"postman.setEnvironmentVariable(\"id_token\", jsonData.id_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "admin-cli",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{keycloak-url}}/auth/realms/{{keycloak-realm}}/protocol/openid-connect/token",
+							"host": [
+								"{{keycloak-url}}"
+							],
+							"path": [
+								"auth",
+								"realms",
+								"{{keycloak-realm}}",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users from Realm",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9090/auth/admin/realms/jhipster/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"auth",
+								"admin",
+								"realms",
+								"jhipster",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Client-App",
+			"item": [
+				{
+					"name": "Get Token for Client-App (Client-Credentials)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9ea7cb99-5b76-415a-bbbb-8bc0cd2fa751",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"token\", jsonData.access_token);\r",
+									"postman.setEnvironmentVariable(\"refresh_token\", jsonData.refresh_token);\r",
+									"postman.setEnvironmentVariable(\"id_token\", jsonData.id_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "client-app",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{client-secret}}",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{keycloak-url}}/auth/realms/{{keycloak-realm}}/protocol/openid-connect/token",
+							"host": [
+								"{{keycloak-url}}"
+							],
+							"path": [
+								"auth",
+								"realms",
+								"{{keycloak-realm}}",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Keycloak Web-App",
+			"item": [
+				{
+					"name": "Get Token for Web-App Client (Password)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6af82107-b531-498e-80b8-b5f34cea3fe8",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"token\", jsonData.access_token);\r",
+									"postman.setEnvironmentVariable(\"refresh_token\", jsonData.refresh_token);\r",
+									"postman.setEnvironmentVariable(\"id_token\", jsonData.id_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "web_app",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{keycloak-url}}/auth/realms/{{keycloak-realm}}/protocol/openid-connect/token",
+							"host": [
+								"{{keycloak-url}}"
+							],
+							"path": [
+								"auth",
+								"realms",
+								"{{keycloak-realm}}",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9090/auth/realms/jhipster/protocol/openid-connect/userinfo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"auth",
+								"realms",
+								"jhipster",
+								"protocol",
+								"openid-connect",
+								"userinfo"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "{{password}}",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "{{username}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "a315c9f3-d1d4-4359-8da2-644c034ca16f",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "ddda9298-33fc-43e8-a4ea-ff062943af70",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
