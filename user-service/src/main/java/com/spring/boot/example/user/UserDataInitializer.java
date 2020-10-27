@@ -12,7 +12,7 @@ public class UserDataInitializer implements DataInitializer {
 
     @Override
     public void initialize() {
-
+        userRepository.deleteAll().subscribe();
     }
 
 }
