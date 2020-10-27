@@ -1,66 +1,58 @@
 package com.spring.boot.example.user.mapper;
 
-import com.nimbusds.jwt.JWTClaimsSet;
+import com.spring.boot.example.security.SafeJwtClaimSet;
 import com.spring.boot.example.user.model.User;
 import com.spring.boot.example.user.model.UserDto;
 import org.springframework.stereotype.Component;
-
-import java.text.ParseException;
-
-import static java.util.Optional.ofNullable;
 
 @Component
 public class UserMapper {
 
     private static final String DEFAULT_LANGUAGE = "en";
 
-    public User map(JWTClaimsSet claimsSet) {
+    public User map(SafeJwtClaimSet claimsSet) {
         User user = new User()
-                .setUid(claimsSet.getSubject())
                 .setActivated(true);
 
-        try {
-            ofNullable(claimsSet.getStringClaim("given_name"))
-                    .ifPresent(user::setFirstName);
+        claimsSet.getSubject()
+                .ifPresentOrElse(user::setUid, () -> {
+                    throw new IllegalStateException("Subject in jwt token is not available.");
+                });
 
-            ofNullable(claimsSet.getStringClaim("family_name"))
-                    .ifPresent(user::setLastName);
+        claimsSet.getGivenName()
+                .ifPresent(user::setFirstName);
 
-            ofNullable(claimsSet.getBooleanClaim("email_verified"))
-                    .ifPresent(user::setActivated);
+        claimsSet.getFamilyName()
+                .ifPresent(user::setLastName);
 
-            ofNullable(claimsSet.getStringClaim("email"))
-                    .ifPresentOrElse(email -> user.setEmail(email.toLowerCase()), () -> user.setEmail(claimsSet.getSubject()));
+        claimsSet.getEmailVerified()
+                .ifPresent(user::setActivated);
 
-            ofNullable(claimsSet.getStringClaim("langKey"))
-                    .ifPresentOrElse(user::setLangKey, () -> setLocaleOrDefault(claimsSet, user));
+        claimsSet.getEmail()
+                .ifPresent(email -> user.setEmail(email.toLowerCase()));
 
-            ofNullable(claimsSet.getStringClaim("picture"))
-                    .ifPresent(user::setImageUrl);
-        } catch (ParseException ex) {
-            throw new IllegalStateException(ex);
-        }
+        claimsSet.getLangKey()
+                .ifPresentOrElse(user::setLangKey, () -> setLocaleOrDefault(claimsSet, user));
+
+        claimsSet.gePicture()
+                .ifPresent(user::setImageUrl);
 
         return user;
     }
 
-    private void setLocaleOrDefault(JWTClaimsSet claimsSet, User user)  {
-        try {
-            ofNullable(claimsSet.getStringClaim("locale"))
-                    .ifPresentOrElse(
-                            locale -> {
-                                if (locale.contains("_")) {
-                                    locale = locale.substring(0, locale.indexOf('_'));
-                                } else if (locale.contains("-")) {
-                                    locale = locale.substring(0, locale.indexOf('-'));
-                                }
+    private void setLocaleOrDefault(SafeJwtClaimSet claimsSet, User user)  {
+        claimsSet.getLocale()
+                .ifPresentOrElse(
+                        locale -> {
+                            if (locale.contains("_")) {
+                                locale = locale.substring(0, locale.indexOf('_'));
+                            } else if (locale.contains("-")) {
+                                locale = locale.substring(0, locale.indexOf('-'));
+                            }
 
-                                user.setLangKey(locale.toLowerCase());
-                            }, () -> user.setLangKey(DEFAULT_LANGUAGE)
-                    );
-        } catch (ParseException ex) {
-            throw new IllegalStateException(ex);
-        }
+                            user.setLangKey(locale.toLowerCase());
+                        }, () -> user.setLangKey(DEFAULT_LANGUAGE)
+                );
     }
 
     public UserDto map(User user) {
