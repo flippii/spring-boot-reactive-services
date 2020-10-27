@@ -5,7 +5,6 @@ import com.spring.boot.example.user.mapper.UserMapper;
 import com.spring.boot.example.user.model.User;
 import com.spring.boot.example.user.model.UserDto;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -18,6 +17,8 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import static java.util.Optional.ofNullable;
+import static reactor.core.publisher.Mono.error;
+import static reactor.core.publisher.Mono.just;
 
 @Service
 @RequiredArgsConstructor
@@ -40,27 +41,30 @@ public class UserService {
         JWTClaimsSet claimsSet = jwtClaimsSetBuilder.build();
 
         return saveUser(claimsSet, userMapper.map(claimsSet))
-                .flatMap(user -> Mono.just(userMapper.map(user)));
+                .flatMap(user -> just(userMapper.map(user)));
     }
 
-    @SneakyThrows(value = ParseException.class)
     private Mono<User> saveUser(JWTClaimsSet claimsSet, User user) {
         return userRepository.findByUid(user.getUid())
                 .switchIfEmpty(userRepository.save(user))
                 .flatMap(existingUser -> {
-                    Optional<Date> updatedAt = ofNullable(claimsSet.getDateClaim("updated_at"));
+                    try {
+                        Optional<Date> updatedAt = ofNullable(claimsSet.getDateClaim("updated_at"));
 
-                    if (updatedAt.isPresent()) {
-                        Instant modifiedDate = updatedAt.get().toInstant();
+                        if (updatedAt.isPresent()) {
+                            Instant modifiedDate = updatedAt.get().toInstant();
 
-                        if (modifiedDate.isAfter(existingUser.getLastModifiedDate())) {
+                            if (modifiedDate.isAfter(existingUser.getLastModifiedDate())) {
+                                return updateUser(user).apply(existingUser);
+                            }
+                        } else {
                             return updateUser(user).apply(existingUser);
                         }
-                    } else {
-                        return updateUser(user).apply(existingUser);
-                    }
 
-                    return Mono.just(existingUser);
+                        return just(existingUser);
+                    } catch (ParseException ex) {
+                        return error(new IllegalStateException(ex));
+                    }
                 });
     }
 

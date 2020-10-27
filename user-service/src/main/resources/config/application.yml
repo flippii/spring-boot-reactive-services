@@ -28,8 +28,3 @@ spring:
           oidc:
             client-id: web_app
             client-secret: web_app
-
-jwt:
-  authenticated-path-matchers:
-    - "/api/**"
-  identity-claim-label: clientId

@@ -1,8 +1,6 @@
 package com.spring.boot.example.user;
 
-import com.spring.boot.example.configuration.JwtProperties;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.server.RouterFunction;
@@ -14,7 +12,6 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 
 @Configuration
 @RequiredArgsConstructor
-@EnableConfigurationProperties(JwtProperties.class)
 public class UserConfiguration {
 
     private final UserApiHandler userApiHandler;
