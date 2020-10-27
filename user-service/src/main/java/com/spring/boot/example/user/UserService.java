@@ -5,15 +5,19 @@ import com.spring.boot.example.user.mapper.UserMapper;
 import com.spring.boot.example.user.model.User;
 import com.spring.boot.example.user.model.UserDto;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.text.ParseException;
 import java.time.Instant;
 import java.util.Date;
-import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
+
+import static java.util.Optional.ofNullable;
 
 @Service
 @RequiredArgsConstructor
@@ -27,26 +31,27 @@ public class UserService {
             throw new IllegalArgumentException("AuthenticationToken is not OAuth2 or JWT!");
         }
 
-        JwtAuthenticationToken authToken = (JwtAuthenticationToken) authentication;
-
         JWTClaimsSet.Builder jwtClaimsSetBuilder = new JWTClaimsSet.Builder();
 
-        authToken.getToken()
+        ((JwtAuthenticationToken) authentication).getToken()
                 .getClaims()
                 .forEach(jwtClaimsSetBuilder::claim);
 
-        JWTClaimsSet jwtClaimsSet = jwtClaimsSetBuilder.build();
+        JWTClaimsSet claimsSet = jwtClaimsSetBuilder.build();
 
-        return saveUser(authToken.getTokenAttributes(), userMapper.map(jwtClaimsSet))
+        return saveUser(claimsSet, userMapper.map(claimsSet))
                 .flatMap(user -> Mono.just(userMapper.map(user)));
     }
 
-    private Mono<User> saveUser(Map<String, Object> details, User user) {
+    @SneakyThrows(value = ParseException.class)
+    private Mono<User> saveUser(JWTClaimsSet claimsSet, User user) {
         return userRepository.findByUid(user.getUid())
                 .switchIfEmpty(userRepository.save(user))
                 .flatMap(existingUser -> {
-                    if (details.get("updated_at") != null) {
-                        Instant modifiedDate = Date.from((Instant) details.get("updated_at")).toInstant();
+                    Optional<Date> updatedAt = ofNullable(claimsSet.getDateClaim("updated_at"));
+
+                    if (updatedAt.isPresent()) {
+                        Instant modifiedDate = updatedAt.get().toInstant();
 
                         if (modifiedDate.isAfter(existingUser.getLastModifiedDate())) {
                             return updateUser(user).apply(existingUser);

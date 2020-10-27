@@ -4,12 +4,9 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.spring.boot.example.user.model.User;
 import com.spring.boot.example.user.model.UserDto;
 import lombok.SneakyThrows;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
-import java.util.Map;
-import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
 
@@ -28,42 +25,37 @@ public class UserMapper {
                 .ifPresent(user::setFirstName);
 
         ofNullable(claimsSet.getStringClaim("family_name"))
+                .ifPresent(user::setLastName);
 
-        if (details.get("family_name") != null) {
-            user.setLastName((String) details.get("family_name"));
-        }
+        ofNullable(claimsSet.getBooleanClaim("email_verified"))
+                .ifPresent(user::setActivated);
 
-        if (details.get("email_verified") != null) {
-            user.setActivated((Boolean) details.get("email_verified"));
-        }
+        ofNullable(claimsSet.getStringClaim("email"))
+                .ifPresentOrElse(email -> user.setEmail(email.toLowerCase()), () -> user.setEmail(claimsSet.getSubject()));
 
-        if (details.get("email") != null) {
-            user.setEmail(((String) details.get("email")).toLowerCase());
-        } else {
-            user.setEmail((String) details.get("sub"));
-        }
+        ofNullable(claimsSet.getStringClaim("langKey"))
+                .ifPresentOrElse(user::setLangKey, () -> setLocaleOrDefault(claimsSet, user));
 
-        if (details.get("langKey") != null) {
-            user.setLangKey((String) details.get("langKey"));
-        } else if (details.get("locale") != null) {
-            String locale = (String) details.get("locale");
-
-            if (locale.contains("_")) {
-                locale = locale.substring(0, locale.indexOf('_'));
-            } else if (locale.contains("-")) {
-                locale = locale.substring(0, locale.indexOf('-'));
-            }
-
-            user.setLangKey(locale.toLowerCase());
-        } else {
-            user.setLangKey(DEFAULT_LANGUAGE);
-        }
-
-        if (details.get("picture") != null) {
-            user.setImageUrl((String) details.get("picture"));
-        }
+        ofNullable(claimsSet.getStringClaim("picture"))
+                .ifPresent(user::setImageUrl);
 
         return user;
+    }
+
+    @SneakyThrows(value = ParseException.class)
+    private void setLocaleOrDefault(JWTClaimsSet claimsSet, User user) {
+        ofNullable(claimsSet.getStringClaim("locale"))
+                .ifPresentOrElse(
+                        locale -> {
+                            if (locale.contains("_")) {
+                                locale = locale.substring(0, locale.indexOf('_'));
+                            } else if (locale.contains("-")) {
+                                locale = locale.substring(0, locale.indexOf('-'));
+                            }
+
+                            user.setLangKey(locale.toLowerCase());
+                        }, () -> user.setLangKey(DEFAULT_LANGUAGE)
+                );
     }
 
     public UserDto map(User user) {
