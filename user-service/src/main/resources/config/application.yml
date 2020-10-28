@@ -24,7 +24,13 @@ spring:
         provider:
           oidc:
             issuer-uri: http://localhost:9090/auth/realms/jhipster
+          manager:
+            token-uri: http://localhost:9090/auth/realms/jhipster/protocol/openid-connect/token
         registration:
           oidc:
             client-id: web_app
             client-secret: web_app
+          manager:
+            authorization-grant-type: client_credentials
+            client-id: client-app
+            client-secret: 3c83fcb4-167a-4788-9e6d-5e459543087d

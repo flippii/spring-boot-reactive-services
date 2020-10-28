@@ -20,7 +20,8 @@ public class UserConfiguration {
     public RouterFunction<?> articleRoutes() {
         RouterFunction<ServerResponse> json = route()
                 .nest(accept(APPLICATION_JSON), builder -> builder
-                        .GET("/account", userApiHandler::account))
+                        .GET("/account", userApiHandler::account)
+                        .GET("/users", userApiHandler::users))
                 .build();
 
         return route().path("/api", () -> json)
