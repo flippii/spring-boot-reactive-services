@@ -6,7 +6,6 @@ import com.spring.boot.example.user.mapper.UserMapper;
 import com.spring.boot.example.user.model.User;
 import com.spring.boot.example.user.model.UserDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -25,14 +24,10 @@ public class UserService {
     private final UserMapper userMapper;
     private final UserRepository userRepository;
 
-    public Mono<UserDto> extractAndSaveUser(Authentication authentication) {
-        if (!(authentication instanceof JwtAuthenticationToken)) {
-            throw new IllegalArgumentException("AuthenticationToken is not OAuth2 or JWT!");
-        }
-
+    public Mono<UserDto> extractAndSaveUser(JwtAuthenticationToken authentication) {
         JWTClaimsSet.Builder jwtClaimsSetBuilder = new JWTClaimsSet.Builder();
 
-        ((JwtAuthenticationToken) authentication).getToken()
+        authentication.getToken()
                 .getClaims()
                 .forEach(jwtClaimsSetBuilder::claim);
 

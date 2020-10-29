@@ -1,6 +1,5 @@
 package com.spring.boot.example.user.model;
 
-import com.spring.boot.example.core.domain.AbstractAuditingDocument;
 import com.spring.boot.example.core.domain.AbstractDocument;
 import lombok.*;
 import lombok.experimental.Accessors;

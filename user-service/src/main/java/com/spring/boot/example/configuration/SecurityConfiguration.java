@@ -35,8 +35,6 @@ public class SecurityConfiguration {
                 .authorizeExchange()
                     .pathMatchers("/actuator/**")
                         .permitAll()
-                    .pathMatchers("/api/users")
-                        .permitAll()
                     .pathMatchers("/api/**")
                         .authenticated()
                 .and()
