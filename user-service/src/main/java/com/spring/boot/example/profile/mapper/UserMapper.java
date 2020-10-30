@@ -1,8 +1,8 @@
-package com.spring.boot.example.user.mapper;
+package com.spring.boot.example.profile.mapper;
 
 import com.spring.boot.example.security.SafeJwtClaimSet;
-import com.spring.boot.example.user.model.User;
-import com.spring.boot.example.user.model.UserDto;
+import com.spring.boot.example.profile.model.User;
+import com.spring.boot.example.profile.model.UserDto;
 import org.springframework.stereotype.Component;
 
 @Component

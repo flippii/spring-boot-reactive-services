@@ -1,4 +1,4 @@
-package com.spring.boot.example.user;
+package com.spring.boot.example.profile;
 
 import com.spring.boot.example.core.initializer.DataInitializer;
 import lombok.RequiredArgsConstructor;

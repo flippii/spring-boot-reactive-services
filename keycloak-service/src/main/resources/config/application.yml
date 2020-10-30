@@ -1,0 +1,25 @@
+logging:
+  level:
+    root: INFO
+    org.springframework.*: INFO
+
+server:
+  port: 8040
+
+base:
+  keycloak-uri: http://localhost:9090/auth
+
+spring:
+  application:
+    name: keycloak-service
+  security:
+    oauth2:
+      client:
+        provider:
+          manager:
+            token-uri: ${base.keycloak-uri}/realms/jhipster/protocol/openid-connect/token
+        registration:
+          manager:
+            authorization-grant-type: client_credentials
+            client-id: client-app
+            client-secret: 3c83fcb4-167a-4788-9e6d-5e459543087d

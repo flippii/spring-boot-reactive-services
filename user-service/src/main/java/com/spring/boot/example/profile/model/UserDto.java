@@ -1,4 +1,4 @@
-package com.spring.boot.example.user.model;
+package com.spring.boot.example.profile.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

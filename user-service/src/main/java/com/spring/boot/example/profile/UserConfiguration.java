@@ -1,4 +1,4 @@
-package com.spring.boot.example.user;
+package com.spring.boot.example.profile;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

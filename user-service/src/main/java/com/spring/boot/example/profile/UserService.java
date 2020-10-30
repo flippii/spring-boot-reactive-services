@@ -1,10 +1,10 @@
-package com.spring.boot.example.user;
+package com.spring.boot.example.profile;
 
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.spring.boot.example.security.SafeJwtClaimSet;
-import com.spring.boot.example.user.mapper.UserMapper;
-import com.spring.boot.example.user.model.User;
-import com.spring.boot.example.user.model.UserDto;
+import com.spring.boot.example.profile.mapper.UserMapper;
+import com.spring.boot.example.profile.model.User;
+import com.spring.boot.example.profile.model.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;

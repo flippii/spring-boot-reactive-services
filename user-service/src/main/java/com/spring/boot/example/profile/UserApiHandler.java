@@ -1,6 +1,6 @@
-package com.spring.boot.example.user;
+package com.spring.boot.example.profile;
 
-import com.spring.boot.example.user.model.UserDto;
+import com.spring.boot.example.profile.model.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -21,16 +21,15 @@ public class UserApiHandler {
 
     public Mono<ServerResponse> user(ServerRequest request) {
         Mono<UserDto> principalMono = request.principal()
-                .filter(principal -> principal instanceof JwtAuthenticationToken)
-                .switchIfEmpty(error(new IllegalArgumentException("AuthenticationToken is not OAuth2 or JWT!")))
-                .map(principal -> (JwtAuthenticationToken) principal)
+                .cast(JwtAuthenticationToken.class)
+                .doOnError(ex -> error(new IllegalArgumentException("AuthenticationToken is not OAuth2 or JWT!", ex)))
                 .flatMap(userService::extractAndSaveUser);
 
         return readResponse(principalMono, UserDto.class);
     }
 
     public Mono<ServerResponse> update(ServerRequest request) {
-
+        return Mono.empty();
     }
 
 }

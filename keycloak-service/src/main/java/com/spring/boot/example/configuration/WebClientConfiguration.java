@@ -38,8 +38,8 @@ public class WebClientConfiguration {
     }
 
     @Bean
-    public ReactiveOAuth2AuthorizedClientManager authorizedClientManager(ReactiveClientRegistrationRepository clientRegistrations,
-                                                                         ReactiveOAuth2AuthorizedClientService authorizedClientService) {
+    public ReactiveOAuth2AuthorizedClientManager authorizedClientManager(
+            ReactiveClientRegistrationRepository clientRegistrations, ReactiveOAuth2AuthorizedClientService authorizedClientService) {
 
         return new AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager(clientRegistrations, authorizedClientService);
     }

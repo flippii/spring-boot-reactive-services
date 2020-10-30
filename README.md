@@ -23,6 +23,8 @@ Then run every Spring Boot app.
   * zuerst mit Okta - dann auf Keycloak umstellen.
   * Messaging Security
   * Prüfung ob der Benutzer den Article löschen, bearbeiten ... kann
-* Mongo DB 4.x + Transactions
+* Mongo DB 4.x 
+  * Transactions
+  * Index in Modellen nutzen
 * Reactive Unit Tests implementieren
 * ReactiveUserDetailsPasswordService -> Wo init. wird es ind er Auto Configuration?

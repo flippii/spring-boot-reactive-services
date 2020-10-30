@@ -1,4 +1,4 @@
-package com.spring.boot.example.user.model;
+package com.spring.boot.example.profile.model;
 
 import com.spring.boot.example.core.domain.AbstractDocument;
 import lombok.*;
