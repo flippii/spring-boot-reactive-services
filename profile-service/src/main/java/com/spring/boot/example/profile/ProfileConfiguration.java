@@ -12,18 +12,22 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 
 @Configuration
 @RequiredArgsConstructor
-public class UserConfiguration {
+public class ProfileConfiguration {
 
-    private final UserApiHandler userApiHandler;
+    private final ProfileApiHandler profileApiHandler;
 
     @Bean
-    public RouterFunction<?> articleRoutes() {
+    public RouterFunction<?> profileRoutes() {
         RouterFunction<ServerResponse> json = route()
                 .nest(accept(APPLICATION_JSON), builder -> builder
-                        .GET("/user", userApiHandler::user))
+                        .GET("/{id}", profileApiHandler::profile)
+                        .POST("", profileApiHandler::create)
+                        .PUT("/{id}", profileApiHandler::update)
+                        .DELETE("/{id}", profileApiHandler::delete)
+                )
                 .build();
 
-        return route().path("/api", () -> json)
+        return route().path("/api/profile", () -> json)
                 .build();
     }
 

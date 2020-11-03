@@ -6,13 +6,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserDataInitializer implements DataInitializer {
+public class ProfileDataInitializer implements DataInitializer {
 
-    private final UserRepository userRepository;
+    private final ProfileRepository profileRepository;
 
     @Override
     public void initialize() {
-        userRepository.deleteAll().subscribe();
+        profileRepository.deleteAll().subscribe();
     }
 
 }

@@ -4,15 +4,15 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtClaimAccessor;
 import reactor.core.publisher.Mono;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ReactiveSecurityContextUtils {
 
-    private static final String UID_CLAIM = "test";
-
     public static Mono<String> currentUserId() {
-        return jwt().map(jwt -> jwt.getClaimAsString(UID_CLAIM));
+        return jwt()
+                .map(JwtClaimAccessor::getSubject);
     }
 
     public static Mono<Jwt> jwt() {

@@ -54,7 +54,7 @@ public class CommentConfiguration {
                    }
             ))
     })
-    public RouterFunction<?> articleRoutes() {
+    public RouterFunction<?> commentRoutes() {
         RouterFunction<ServerResponse> json = route()
                 .nest(accept(APPLICATION_JSON), builder -> builder
                         .GET("/", commentApiHandler::comments)

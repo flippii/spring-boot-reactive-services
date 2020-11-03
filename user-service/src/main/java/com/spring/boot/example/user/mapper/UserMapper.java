@@ -1,8 +1,8 @@
-package com.spring.boot.example.profile.mapper;
+package com.spring.boot.example.user.mapper;
 
 import com.spring.boot.example.security.SafeJwtClaimSet;
-import com.spring.boot.example.profile.model.User;
-import com.spring.boot.example.profile.model.UserDto;
+import com.spring.boot.example.user.model.User;
+import com.spring.boot.example.user.model.UserDto;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -41,18 +41,17 @@ public class UserMapper {
     }
 
     private void setLocaleOrDefault(SafeJwtClaimSet claimsSet, User user)  {
-        claimsSet.getLocale()
-                .ifPresentOrElse(
-                        locale -> {
-                            if (locale.contains("_")) {
-                                locale = locale.substring(0, locale.indexOf('_'));
-                            } else if (locale.contains("-")) {
-                                locale = locale.substring(0, locale.indexOf('-'));
-                            }
+        claimsSet.getLocale().ifPresentOrElse(
+                locale -> {
+                    if (locale.contains("_")) {
+                        locale = locale.substring(0, locale.indexOf('_'));
+                    } else if (locale.contains("-")) {
+                        locale = locale.substring(0, locale.indexOf('-'));
+                    }
 
-                            user.setLangKey(locale.toLowerCase());
-                        }, () -> user.setLangKey(DEFAULT_LANGUAGE)
-                );
+                    user.setLangKey(locale.toLowerCase());
+                }, () -> user.setLangKey(DEFAULT_LANGUAGE)
+        );
     }
 
     public UserDto map(User user) {

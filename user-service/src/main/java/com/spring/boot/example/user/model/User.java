@@ -1,7 +1,9 @@
-package com.spring.boot.example.profile.model;
+package com.spring.boot.example.user.model;
 
 import com.spring.boot.example.core.domain.AbstractDocument;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -15,7 +17,7 @@ import java.time.Instant;
 @Setter
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@Document(collection = "user")
+@Document(collection = "users")
 public class User extends AbstractDocument<String> {
 
     @Id

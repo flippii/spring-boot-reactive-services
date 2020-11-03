@@ -34,6 +34,7 @@
         <module>favourite-service</module>
         <module>feed-service</module>
         <module>keycloak-service</module>
+        <module>profile-service</module>
         <module>user-service</module>
     </modules>
 

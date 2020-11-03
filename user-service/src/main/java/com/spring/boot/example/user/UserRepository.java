@@ -1,6 +1,6 @@
-package com.spring.boot.example.profile;
+package com.spring.boot.example.user;
 
-import com.spring.boot.example.profile.model.User;
+import com.spring.boot.example.user.model.User;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import reactor.core.publisher.Mono;
 

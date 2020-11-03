@@ -1,21 +1,23 @@
 logging:
   level:
     root: INFO
+    kafka.*: WARN
     org.springframework.*: INFO
+    org.apache.kafka.*: WARN
 
 server:
-  port: 8040
+  port: 8050
 
 base:
   keycloak-uri: http://localhost:9090/auth
 
 spring:
   application:
-    name: user-service
+    name: profile-service
   data:
     mongodb:
       uri: mongodb://localhost:27017
-      database: reactive-user-service
+      database: reactive-profile-service
   security:
     oauth2:
       resourceserver:

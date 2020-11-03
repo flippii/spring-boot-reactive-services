@@ -9,7 +9,7 @@ import java.time.Instant;
 @Data
 @NoArgsConstructor
 @Accessors(chain = true)
-public class UserDto {
+public class ProfileDto {
 
     private String uid;
     private String firstName;

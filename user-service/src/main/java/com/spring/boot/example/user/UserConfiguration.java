@@ -1,4 +1,4 @@
-package com.spring.boot.example.follow;
+package com.spring.boot.example.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -12,19 +12,18 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 
 @Configuration
 @RequiredArgsConstructor
-public class FollowConfiguration {
+public class UserConfiguration {
 
-    private final FollowUserApiHandler followUserApiHandler;
+    private final UserApiHandler userApiHandler;
 
     @Bean
-    public RouterFunction<?> articleRoutes() {
+    public RouterFunction<?> userRoutes() {
         RouterFunction<ServerResponse> json = route()
                 .nest(accept(APPLICATION_JSON), builder -> builder
-                        .GET("/follow/{userId}", followUserApiHandler::follow)
-                        .GET("/unfollow/{userId}", followUserApiHandler::unfollow))
+                        .GET("", userApiHandler::extractUser))
                 .build();
 
-        return route().path("/api/users", () -> json)
+        return route().path("/api/user", () -> json)
                 .build();
     }
 
