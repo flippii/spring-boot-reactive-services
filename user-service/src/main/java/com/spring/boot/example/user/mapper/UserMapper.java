@@ -2,7 +2,7 @@ package com.spring.boot.example.user.mapper;
 
 import com.spring.boot.example.security.SafeJwtClaimSet;
 import com.spring.boot.example.user.model.User;
-import com.spring.boot.example.user.model.UserDto;
+import com.spring.boot.example.user.model.UserResponse;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -54,8 +54,8 @@ public class UserMapper {
         );
     }
 
-    public UserDto map(User user) {
-        return new UserDto()
+    public UserResponse map(User user) {
+        return new UserResponse()
                 .setUid(user.getId())
                 .setFirstName(user.getFirstName())
                 .setLastName(user.getLastName())

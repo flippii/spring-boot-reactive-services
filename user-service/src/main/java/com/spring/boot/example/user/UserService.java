@@ -4,7 +4,7 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.spring.boot.example.security.SafeJwtClaimSet;
 import com.spring.boot.example.user.mapper.UserMapper;
 import com.spring.boot.example.user.model.User;
-import com.spring.boot.example.user.model.UserDto;
+import com.spring.boot.example.user.model.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class UserService {
     private final UserMapper userMapper;
     private final UserRepository userRepository;
 
-    public Mono<UserDto> extractAndSaveUser(JwtAuthenticationToken authentication) {
+    public Mono<UserResponse> extractAndSaveUser(JwtAuthenticationToken authentication) {
         JWTClaimsSet.Builder jwtClaimsSetBuilder = new JWTClaimsSet.Builder();
 
         authentication.getToken()

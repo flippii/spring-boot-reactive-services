@@ -8,4 +8,6 @@ public interface FollowRepository extends ReactiveMongoRepository<FollowRelation
 
     Mono<FollowRelation> findByIdAndTargetId(String id, String targetId);
 
+    boolean existsByIdAndTargetId(String id, String targetId);
+
 }

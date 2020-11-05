@@ -27,7 +27,7 @@ public class ProfileConfiguration {
                 )
                 .build();
 
-        return route().path("/api/profile", () -> json)
+        return route().path("/api/profiles", () -> json)
                 .build();
     }
 

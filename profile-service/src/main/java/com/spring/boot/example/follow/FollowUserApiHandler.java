@@ -27,11 +27,10 @@ public class FollowUserApiHandler {
 
         Mono<Profile> userMono = profileRepository.findByUid(userId)
                 .zipWith(currentUserId())
-                .flatMap(tuple -> {
-                    FollowRelation followRelation = new FollowRelation(tuple.getT2(), tuple.getT1().getUid());
-                    return followService.saveRelation(followRelation)
-                            .then(profileRepository.findByUid(tuple.getT1().getUid()));
-                })
+                .flatMap(tuple ->
+                        followService.saveRelation(new FollowRelation(tuple.getT2(), tuple.getT1().getUid()))
+                                .then(profileRepository.findByUid(tuple.getT1().getUid()))
+                )
                 .switchIfEmpty(handleUserNotFoundError(userId));
 
         return readResponse(userMono, Profile.class);

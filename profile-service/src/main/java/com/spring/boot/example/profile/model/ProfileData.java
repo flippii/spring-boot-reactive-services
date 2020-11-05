@@ -1,4 +1,4 @@
-package com.spring.boot.example.user.model;
+package com.spring.boot.example.profile.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,15 +9,14 @@ import java.time.Instant;
 @Data
 @NoArgsConstructor
 @Accessors(chain = true)
-public class UserDto {
+public class ProfileData {
 
-    private String uid;
+    private String id;
     private String firstName;
     private String lastName;
-    private String email;
-    private boolean activated = false;
-    private String langKey;
+    private String bio;
     private String imageUrl;
+    private boolean following;
     private Instant createdAt;
     private Instant lastModifiedDate;
 

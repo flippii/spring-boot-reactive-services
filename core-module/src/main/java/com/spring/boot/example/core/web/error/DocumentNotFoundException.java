@@ -10,4 +10,8 @@ public class DocumentNotFoundException extends ResponseStatusException {
         super(NOT_FOUND, reason);
     }
 
+    public DocumentNotFoundException(String reason, Throwable throwable) {
+        super(NOT_FOUND, reason, throwable);
+    }
+
 }
