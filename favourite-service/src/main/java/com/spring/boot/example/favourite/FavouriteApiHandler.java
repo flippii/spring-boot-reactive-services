@@ -11,11 +11,11 @@ import reactor.core.publisher.Mono;
 public class FavouriteApiHandler {
 
     public Mono<ServerResponse> favouriteArticle(ServerRequest request) {
-
+        return Mono.empty();
     }
 
     public Mono<ServerResponse> unFavouriteArticle(ServerRequest request) {
-
+        return Mono.empty();
     }
 
 }

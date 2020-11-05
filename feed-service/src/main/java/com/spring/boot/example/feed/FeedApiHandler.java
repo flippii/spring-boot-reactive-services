@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
 public class FeedApiHandler {
 
     public Mono<ServerResponse> feed(ServerRequest request) {
-
+        return Mono.empty();
     }
 
 }
