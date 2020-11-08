@@ -28,3 +28,4 @@ Then run every Spring Boot app.
   * Index in Modellen nutzen
 * Reactive Unit Tests implementieren
 * ReactiveUserDetailsPasswordService -> Wo init. wird es ind er Auto Configuration?
+* JWT Token ist abgelaufen - Exception nicht zusätzlich tum Token invalid Header 
