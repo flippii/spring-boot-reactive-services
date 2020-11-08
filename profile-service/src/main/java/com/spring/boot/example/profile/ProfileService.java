@@ -56,9 +56,7 @@ public class ProfileService {
 
     public Mono<Profile> delete(String id, String uid) {
         return profileRepository.findByIdAndUid(id, uid)
-                .flatMap(profile ->
-                        profileRepository.delete(profile).then(just(profile))
-                );
+                .flatMap(profile -> profileRepository.delete(profile).then(just(profile)));
     }
 
 }

@@ -5,6 +5,7 @@ import com.spring.boot.example.follow.model.FollowRelation;
 import com.spring.boot.example.profile.ProfileRepository;
 import com.spring.boot.example.profile.model.Profile;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -16,12 +17,13 @@ import static reactor.core.publisher.Mono.error;
 
 @Component
 @RequiredArgsConstructor
-public class FollowUserApiHandler {
+public class FollowApiHandler {
 
     private final FollowService followService;
     private final ProfileRepository profileRepository;
     private final FollowRepository followRepository;
 
+    @NonNull
     public Mono<ServerResponse> follow(ServerRequest request) {
         String userId = request.pathVariable("userId");
 
@@ -36,6 +38,7 @@ public class FollowUserApiHandler {
         return readResponse(userMono, Profile.class);
     }
 
+    @NonNull
     public Mono<ServerResponse> unfollow(ServerRequest request) {
         String userId = request.pathVariable("userId");
 

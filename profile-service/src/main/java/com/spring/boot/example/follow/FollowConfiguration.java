@@ -14,14 +14,14 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 @RequiredArgsConstructor
 public class FollowConfiguration {
 
-    private final FollowUserApiHandler followUserApiHandler;
+    private final FollowApiHandler followApiHandler;
 
     @Bean
     public RouterFunction<?> followRoutes() {
         RouterFunction<ServerResponse> json = route()
                 .nest(accept(APPLICATION_JSON), builder -> builder
-                        .GET("/follow/{userId}", followUserApiHandler::follow)
-                        .GET("/unfollow/{userId}", followUserApiHandler::unfollow))
+                        .GET("/follow/{userId}", followApiHandler::follow)
+                        .GET("/unfollow/{userId}", followApiHandler::unfollow))
                 .build();
 
         return route().path("/api/users", () -> json)

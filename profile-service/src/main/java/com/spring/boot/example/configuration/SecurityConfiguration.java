@@ -33,10 +33,8 @@ public class SecurityConfiguration {
     public SecurityWebFilterChain configure(ServerHttpSecurity http) {
         http
                 .authorizeExchange()
-                    .pathMatchers("/actuator/**")
-                        .permitAll()
-                    .pathMatchers("/api/**")
-                        .authenticated()
+                    .pathMatchers("/actuator/**").permitAll()
+                    .pathMatchers("/api/**").authenticated()
                 .and()
                 .oauth2Client()
                 .and()

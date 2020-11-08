@@ -8,6 +8,9 @@ logging:
 server:
   port: 8070
 
+base:
+  keycloak-uri: http://localhost:9090/auth
+
 spring:
   application:
     name: favourite-service
@@ -15,3 +18,30 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017
       database: reactive-favourite-service
+  cloud:
+    stream:
+      bindings:
+        article:
+          binder: kafka
+          destination: article
+          group: article-group
+          contentType: 'application/json'
+          consumer:
+            concurrency: 1
+      kafka:
+        binder:
+          brokers:
+            - localhost:9092
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${base.keycloak-uri}/realms/jhipster/.well-known/openid-configuration
+      client:
+        provider:
+          oidc:
+            issuer-uri: ${base.keycloak-uri}/realms/jhipster
+        registration:
+          oidc:
+            client-id: web_app
+            client-secret: web_app

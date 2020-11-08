@@ -9,7 +9,7 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 
-import static reactor.core.publisher.Mono.error;
+import static reactor.core.publisher.Mono.just;
 
 @Slf4j
 @Configuration
@@ -32,14 +32,28 @@ public class ArticleProcessor {
     }
 
     private void addArticle(ArticleEvent event) {
-        articleRepository.save(new Article(event.getId(), event.getMessage().getSlug()))
-                .switchIfEmpty(error(new ArticleProcessException("Article not saved.", event.getId())))
+        articleRepository.findById(event.getId())
+                .switchIfEmpty(
+                        just(new Article()
+                                .setId(event.getId()))
+                )
+                .flatMap(article -> {
+                     article.setSlug(event.getMessage().getSlug())
+                            .setTitle(event.getMessage().getTitle())
+                            .setDescription(event.getMessage().getDescription())
+                            .setBody(event.getMessage().getBody());
+
+                    return articleRepository.save(article);
+                })
+                .doOnSuccess(article -> log.trace("Article with id: {} saved.", article.getId()))
+                .onErrorMap(ex -> new ArticleProcessException("Article not saved.", event.getId(), ex))
                 .subscribe();
     }
 
     private void deleteArticle(ArticleEvent event) {
-        articleRepository.deleteById(event.getId())
-                .switchIfEmpty(error(new ArticleProcessException("Article not deleted.", event.getId())))
+        articleRepository.findById(event.getId())
+                .flatMap(articleRepository::delete)
+                .onErrorMap(ex -> new ArticleProcessException("Article not deleted.", event.getId(), ex))
                 .subscribe();
     }
 

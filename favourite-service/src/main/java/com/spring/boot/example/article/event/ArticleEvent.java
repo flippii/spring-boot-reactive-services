@@ -21,6 +21,9 @@ public class ArticleEvent implements DomainEvent<String> {
     public static class Message {
 
         private final String slug;
+        private final String title;
+        private final String description;
+        private final String body;
 
     }
 

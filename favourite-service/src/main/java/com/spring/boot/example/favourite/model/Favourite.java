@@ -5,7 +5,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -16,17 +15,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "article-favourite")
 public class Favourite extends AbstractDocument<String> {
 
-    @Id
-    private String id;
-
     @Indexed(name = "article.index")
-    private String articleId;
-
-    @Indexed(name = "user.index")
+    private String id;
     private String userId;
 
-    public Favourite(String articleId, String userId) {
-        this.articleId = articleId;
+    public Favourite(String id, String userId) {
+        this.id = id;
         this.userId = userId;
     }
 
