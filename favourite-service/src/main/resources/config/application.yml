@@ -21,13 +21,11 @@ spring:
   cloud:
     stream:
       bindings:
-        article:
+        output:
           binder: kafka
-          destination: article
-          group: article-group
+          destination: favourite
           contentType: 'application/json'
-          consumer:
-            concurrency: 1
+          group: favourite-group
       kafka:
         binder:
           brokers:
@@ -45,3 +43,7 @@ spring:
           oidc:
             client-id: web_app
             client-secret: web_app
+
+favourite:
+  messaging:
+    timeout: 30000

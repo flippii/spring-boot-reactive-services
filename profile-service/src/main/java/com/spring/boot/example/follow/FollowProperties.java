@@ -1,11 +1,11 @@
-package com.spring.boot.example.favourite;
+package com.spring.boot.example.follow;
 
 import lombok.Data;
 import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "favourite")
-public class FavouriteProperties {
+@ConfigurationProperties(prefix = "follow")
+public class FollowProperties {
 
     @Getter
     private final Messaging messaging = new Messaging();

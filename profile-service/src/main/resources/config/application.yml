@@ -18,6 +18,18 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017
       database: reactive-profile-service
+  cloud:
+    stream:
+      bindings:
+        output:
+          binder: kafka
+          destination: follow
+          contentType: 'application/json'
+          group: follow-group
+      kafka:
+        binder:
+          brokers:
+            - localhost:9092
   security:
     oauth2:
       resourceserver:
@@ -31,3 +43,7 @@ spring:
           oidc:
             client-id: web_app
             client-secret: web_app
+
+follow:
+  messaging:
+    timeout: 30000

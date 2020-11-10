@@ -8,6 +8,9 @@ logging:
 server:
   port: 8080
 
+base:
+  keycloak-uri: http://localhost:9090/auth
+
 spring:
   application:
     name: article-service
@@ -27,6 +30,19 @@ spring:
         binder:
           brokers:
             - localhost:9092
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${base.keycloak-uri}/realms/jhipster/.well-known/openid-configuration
+      client:
+        provider:
+          oidc:
+            issuer-uri: ${base.keycloak-uri}/realms/jhipster
+        registration:
+          oidc:
+            client-id: web_app
+            client-secret: web_app
 
 article:
   messaging:
