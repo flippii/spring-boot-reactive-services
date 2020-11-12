@@ -2,7 +2,7 @@ package com.spring.boot.example.article;
 
 import br.com.fluentvalidator.context.ValidationResult;
 import com.spring.boot.example.article.model.Article;
-import com.spring.boot.example.article.model.ArticleDto;
+import com.spring.boot.example.article.model.ArticleParams;
 import com.spring.boot.example.core.web.error.DocumentNotFoundException;
 import com.spring.boot.example.core.web.error.ValidationException;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class ArticleApiHandler {
     }
 
     public Mono<ServerResponse> create(ServerRequest request) {
-        Mono<Article> articleMono = request.bodyToMono(ArticleDto.class)
+        Mono<Article> articleMono = request.bodyToMono(ArticleParams.class)
                 .doOnNext(this::validateArticle)
                 .flatMap(articleService::create)
                 .switchIfEmpty(error(new DocumentNotFoundException("Can't create new article.")));
@@ -42,7 +42,7 @@ public class ArticleApiHandler {
     public Mono<ServerResponse> update(ServerRequest request) {
         String slug = request.pathVariable("slug");
 
-        Mono<Article> articleMono = request.bodyToMono(ArticleDto.class)
+        Mono<Article> articleMono = request.bodyToMono(ArticleParams.class)
                 .doOnNext(this::validateArticle)
                 .flatMap(articleDto -> articleService.update(slug, articleDto))
                 .switchIfEmpty(error(new DocumentNotFoundException("Can't update article with slug \"" + slug + "\".")));
@@ -50,7 +50,7 @@ public class ArticleApiHandler {
         return readResponse(articleMono, Article.class);
     }
 
-    private void validateArticle(ArticleDto articleDto) {
+    private void validateArticle(ArticleParams articleDto) {
         final ValidationResult result = articleDtoValidator.validate(articleDto);
 
         if (!result.isValid()) {

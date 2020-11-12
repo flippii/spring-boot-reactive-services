@@ -2,7 +2,7 @@ package com.spring.boot.example.comment;
 
 import com.spring.boot.example.article.ArticleRepository;
 import com.spring.boot.example.comment.model.Comment;
-import com.spring.boot.example.comment.model.CommentDto;
+import com.spring.boot.example.comment.model.CommentParams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -23,10 +23,10 @@ public class CommentService {
                 );
     }
 
-    public Mono<Comment> create(String slug, CommentDto commentDto) {
+    public Mono<Comment> create(String slug, CommentParams commentParams) {
         return articleRepository.findBySlug(slug)
                 .flatMap(article ->
-                        commentRepository.save(new Comment(commentDto.getBody(), article.getId()))
+                        commentRepository.save(new Comment(commentParams.getBody(), article.getId()))
                 );
     }
 

@@ -9,8 +9,6 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 
-import static reactor.core.publisher.Mono.error;
-
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
@@ -33,13 +31,15 @@ public class ArticleProcessor {
 
     private void addArticle(ArticleEvent event) {
         articleRepository.save(new Article(event.getId(), event.getMessage().getSlug()))
-                .switchIfEmpty(error(new ArticleProcessException("Article not saved.", event.getId())))
+                .doOnSuccess(article -> log.trace("Article with id: {} saved.", article.getId()))
+                .doOnError(ex -> log.error("Article with id: {} not saved.", event.getId(), ex))
                 .subscribe();
     }
 
     private void deleteArticle(ArticleEvent event) {
         articleRepository.deleteById(event.getId())
-                .switchIfEmpty(error(new ArticleProcessException("Article not deleted.", event.getId())))
+                .doOnSuccess(article -> log.trace("Article with id: {} deleted.", event.getId()))
+                .doOnError(ex -> log.error("Article with id: {} not deleted.", event.getId(), ex))
                 .subscribe();
     }
 

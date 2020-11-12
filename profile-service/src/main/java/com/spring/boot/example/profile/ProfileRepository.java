@@ -8,6 +8,4 @@ public interface ProfileRepository extends ReactiveMongoRepository<Profile, Stri
 
     Mono<Profile> findByUid(String uid);
 
-    Mono<Profile> findByIdAndUid(String id, String uid);
-
 }

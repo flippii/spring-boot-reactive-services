@@ -1,6 +1,6 @@
 package com.spring.boot.example.comment;
 
-import com.spring.boot.example.comment.model.CommentDto;
+import com.spring.boot.example.comment.model.CommentParams;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -34,13 +34,13 @@ public class CommentConfiguration {
             @RouterOperation(path = "/api/articles/{slug}/comments", beanClass = CommentApiHandler.class, beanMethod = "comments", method = GET,
                     operation = @Operation(operationId = "comments",
                             parameters = { @Parameter(in = ParameterIn.PATH, name = "slug", description = "Article Slug") },
-                            responses = { @ApiResponse(content = { @Content(schema = @Schema(anyOf = CommentDto.class))})
+                            responses = { @ApiResponse(content = { @Content(schema = @Schema(anyOf = CommentParams.class))})
                     }
             )),
             @RouterOperation(path = "/api/articles/{slug}/comments", beanClass = CommentApiHandler.class, beanMethod = "create", method = POST,
                    operation = @Operation(operationId = "create",
                            parameters = { @Parameter(in = ParameterIn.PATH, name = "slug", description = "Article Slug") },
-                           requestBody = @RequestBody(required = true, content = { @Content(schema = @Schema(implementation = CommentDto.class)) }),
+                           requestBody = @RequestBody(required = true, content = { @Content(schema = @Schema(implementation = CommentParams.class)) }),
                            responses = { @ApiResponse(content = { @Content(schema = @Schema()) })
                    }
             )),
@@ -50,7 +50,7 @@ public class CommentConfiguration {
                                     @Parameter(in = ParameterIn.PATH, name = "slug", description = "Article Slug"),
                                     @Parameter(in = ParameterIn.PATH, name = "id", description = "Comment Id")
                            },
-                           responses = { @ApiResponse(content = { @Content(schema = @Schema(implementation = CommentDto.class)) })
+                           responses = { @ApiResponse(content = { @Content(schema = @Schema(implementation = CommentParams.class)) })
                    }
             ))
     })

@@ -18,6 +18,7 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017
       database: reactive-articles-service
+      auto-index-creation: true
   cloud:
     stream:
       bindings:

@@ -24,7 +24,7 @@ public class KeycloakApiHandler {
     private final KeycloakProperties keycloakProperties;
 
     public Mono<ServerResponse> users(ServerRequest request) {
-        int first = Integer.parseInt(request.queryParam("first").orElse("1"));
+        int first = Integer.parseInt(request.queryParam("first").orElse("0"));
         int max = Integer.parseInt(request.queryParam("max").orElse("20"));
 
         Flux<KeycloakUser> userFlux = defaultResponseSpec(format("/users?max=%s&first=%s", max, first))

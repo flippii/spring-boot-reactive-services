@@ -20,10 +20,10 @@ public class ProfileConfiguration {
     public RouterFunction<?> profileRoutes() {
         RouterFunction<ServerResponse> json = route()
                 .nest(accept(APPLICATION_JSON), builder -> builder
-                        .GET("/{id}", profileApiHandler::profile)
+                        .GET("", profileApiHandler::profile)
                         .POST("", profileApiHandler::create)
-                        .PUT("/{id}", profileApiHandler::update)
-                        .DELETE("/{id}", profileApiHandler::delete)
+                        .PUT("", profileApiHandler::update)
+                        .DELETE("", profileApiHandler::delete)
                 )
                 .build();
 

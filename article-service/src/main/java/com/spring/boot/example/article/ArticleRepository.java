@@ -8,4 +8,6 @@ public interface ArticleRepository extends ReactiveMongoRepository<Article, Stri
 
     Mono<Article> findBySlug(String slug);
 
+
+
 }

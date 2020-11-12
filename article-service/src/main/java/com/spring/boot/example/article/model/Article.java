@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Set;
@@ -23,6 +24,8 @@ public class Article extends AbstractAuditingDocument<String> {
 
     @Id
     private String id;
+
+    @Indexed(name = "slug-index", unique = true)
     private String slug;
     private String title;
     private String description;

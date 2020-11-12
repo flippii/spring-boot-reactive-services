@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ArticleDto {
+public class ArticleParams {
 
     private String title;
     private String description;

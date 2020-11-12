@@ -1,7 +1,7 @@
 package com.spring.boot.example.article;
 
 import com.spring.boot.example.article.model.Article;
-import com.spring.boot.example.article.model.ArticleDto;
+import com.spring.boot.example.article.model.ArticleParams;
 import com.spring.boot.example.article.model.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,23 +22,24 @@ public class ArticleService {
         return articleRepository.findBySlug(slug);
     }
 
-    public Mono<Article> create(ArticleDto articleDto) {
+    public Mono<Article> create(ArticleParams articleDto) {
         Article article = new Article(
                 articleDto.getTitle(),
                 articleDto.getDescription(),
                 articleDto.getBody(),
                 transformTags(articleDto.getTags()));
 
-        return articleRepository.save(article);
+        return articleRepository.save(article)
+                .onErrorMap(ex -> new ArticleDuplicateKeyException("Article with slug: " + article.getSlug() + " exists.", ex));
     }
 
-    public Mono<Article> update(String slug, ArticleDto articleDto) {
+    public Mono<Article> update(String slug, ArticleParams articleParams) {
         return articleRepository.findBySlug(slug)
                 .flatMap(article -> {
-                    article.setTitle(articleDto.getTitle())
-                        .setDescription(articleDto.getDescription())
-                        .setBody(articleDto.getBody())
-                        .setTags(transformTags(articleDto.getTags()));
+                    article.setTitle(articleParams.getTitle())
+                        .setDescription(articleParams.getDescription())
+                        .setBody(articleParams.getBody())
+                        .setTags(transformTags(articleParams.getTags()));
 
                     return articleRepository.save(article);
                 });

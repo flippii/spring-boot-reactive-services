@@ -2,7 +2,7 @@ package com.spring.boot.example.comment;
 
 import br.com.fluentvalidator.context.ValidationResult;
 import com.spring.boot.example.comment.model.Comment;
-import com.spring.boot.example.comment.model.CommentDto;
+import com.spring.boot.example.comment.model.CommentParams;
 import com.spring.boot.example.core.web.error.DocumentNotFoundException;
 import com.spring.boot.example.core.web.error.ValidationException;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,7 +39,7 @@ public class CommentApiHandler {
     public Mono<ServerResponse> create(ServerRequest request) {
         String slug = request.pathVariable("slug");
 
-        Mono<Comment> commentMono = request.bodyToMono(CommentDto.class)
+        Mono<Comment> commentMono = request.bodyToMono(CommentParams.class)
                 .doOnNext(commentDto -> {
                     final ValidationResult result = commentDtoValidator.validate(commentDto);
 

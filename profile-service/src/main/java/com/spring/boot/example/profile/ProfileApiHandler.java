@@ -8,6 +8,7 @@ import com.spring.boot.example.profile.model.ProfileParams;
 import com.spring.boot.example.profile.model.ProfileData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -28,18 +29,18 @@ public class ProfileApiHandler {
     private final ProfileService profileService;
     private final ProfileParamsValidator profileParamsValidator;
 
+    @NonNull
     public Mono<ServerResponse> profile(ServerRequest request) {
-        String id = request.pathVariable("id");
-
         Mono<ProfileData> profileMono = currentUserId()
                 .flatMap(uid ->
-                        profileService.getById(id, uid)
-                                .switchIfEmpty(error(new DocumentNotFoundException("Profile with id \"" + id + "\" not found.")))
+                        profileService.getById(uid)
+                                .switchIfEmpty(error(new DocumentNotFoundException("Profile with uid \"" + uid + "\" not found.")))
                 );
 
         return readResponse(profileMono, ProfileData.class);
     }
 
+    @NonNull
     public Mono<ServerResponse> create(ServerRequest request) {
         Mono<Profile> profileMono = request.bodyToMono(ProfileParams.class)
                 .zipWith(currentUserId())
@@ -49,19 +50,17 @@ public class ProfileApiHandler {
                                 .doOnError(throwable -> error(new DocumentNotFoundException("Can't create new profile.", throwable)))
                 );
 
-
         return writeResponse(profileMono, (profile) -> URI.create("/api/profiles/" + profile.getId()));
     }
 
+    @NonNull
     public Mono<ServerResponse> update(ServerRequest request) {
-        String id = request.pathVariable("id");
-
         Mono<Profile> profileMono = request.bodyToMono(ProfileParams.class)
                 .zipWith(currentUserId())
                 .doOnNext(tuple -> validateProfileRequest(tuple.getT1()))
                 .flatMap(tuple ->
-                        profileService.update(id, tuple.getT2(), tuple.getT1())
-                                .doOnError(throwable -> error(new DocumentNotFoundException("Can't update profile with id \"" + id + "\".")))
+                        profileService.update(tuple.getT2(), tuple.getT1())
+                                .doOnError(throwable -> error(new DocumentNotFoundException("Can't update profile with uid \"" + tuple.getT2() + "\".")))
                 );
 
         return readResponse(profileMono, Profile.class);
@@ -75,13 +74,12 @@ public class ProfileApiHandler {
         }
     }
 
+    @NonNull
     public Mono<ServerResponse> delete(ServerRequest request) {
-        String id = request.pathVariable("id");
-
         Mono<Profile> profileMono = currentUserId()
                 .flatMap(uid ->
-                        profileService.delete(uid, id)
-                                .doOnError(throwable -> error(new DocumentNotFoundException("Can't delete profile with id \"" + id + "\".", throwable)))
+                        profileService.delete(uid)
+                                .doOnError(throwable -> error(new DocumentNotFoundException("Can't delete profile with uid \"" + uid + "\".", throwable)))
                 );
 
         return readResponse(profileMono, Profile.class);

@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class CommentDto {
+public class CommentParams {
 
     private String body;
 

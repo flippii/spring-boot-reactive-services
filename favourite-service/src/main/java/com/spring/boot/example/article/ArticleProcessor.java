@@ -46,14 +46,15 @@ public class ArticleProcessor {
                     return articleRepository.save(article);
                 })
                 .doOnSuccess(article -> log.trace("Article with id: {} saved.", article.getId()))
-                .onErrorMap(ex -> new ArticleProcessException("Article not saved.", event.getId(), ex))
+                .doOnError(ex -> log.error("Article with id: {} not saved.", event.getId(), ex))
                 .subscribe();
     }
 
     private void deleteArticle(ArticleEvent event) {
         articleRepository.findById(event.getId())
                 .flatMap(articleRepository::delete)
-                .onErrorMap(ex -> new ArticleProcessException("Article not deleted.", event.getId(), ex))
+                .doOnSuccess(article -> log.trace("Article with id: {} deleted.", event.getId()))
+                .doOnError(ex -> log.error("Article with id: {} not deleted.", event.getId(), ex))
                 .subscribe();
     }
 

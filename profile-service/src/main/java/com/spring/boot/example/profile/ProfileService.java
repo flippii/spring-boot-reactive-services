@@ -17,18 +17,21 @@ public class ProfileService {
     private final ProfileRepository profileRepository;
     private final FollowRepository followRepository;
 
-    public Mono<ProfileData> getById(String id, String uid) {
-        return profileRepository.findById(id)
+    public Mono<ProfileData> getById(String uid) {
+        return profileRepository.findByUid(uid)
                 .map(profile ->
-                     new ProfileData()
-                            .setId(profile.getId())
-                            .setFirstName(profile.getFirstName())
-                            .setLastName(profile.getLastName())
-                            .setImageUrl(profile.getImageUrl())
-                            .setFollowing(followRepository.existsByIdAndTargetId(uid, id))
-                            .setCreatedAt(profile.getCreatedDate())
-                            .setLastModifiedDate(profile.getLastModifiedDate())
-               );
+                        new ProfileData()
+                                .setId(profile.getId())
+                                .setFirstName(profile.getFirstName())
+                                .setLastName(profile.getLastName())
+                                .setImageUrl(profile.getImageUrl())
+                                .setCreatedAt(profile.getCreatedDate())
+                                .setLastModifiedDate(profile.getLastModifiedDate()))
+                .flatMap(profileData ->
+                        followRepository.findById(uid)
+                                .doOnSuccess(followRelation -> profileData.setFollowing(followRelation != null))
+                                .then(just(profileData))
+                );
     }
 
     public Mono<Profile> create(String uid, ProfileParams profileParams) {
@@ -42,8 +45,8 @@ public class ProfileService {
         return profileRepository.save(profile);
     }
 
-    public Mono<Profile> update(String id, String uid, ProfileParams profileParams) {
-        return profileRepository.findByIdAndUid(id, uid)
+    public Mono<Profile> update(String uid, ProfileParams profileParams) {
+        return profileRepository.findByUid(uid)
                 .flatMap(profile -> {
                     profile.setFirstName(profileParams.getFirstName())
                             .setLastName(profileParams.getLastName())
@@ -54,8 +57,8 @@ public class ProfileService {
                 });
     }
 
-    public Mono<Profile> delete(String id, String uid) {
-        return profileRepository.findByIdAndUid(id, uid)
+    public Mono<Profile> delete(String uid) {
+        return profileRepository.findByUid(uid)
                 .flatMap(profile -> profileRepository.delete(profile).then(just(profile)));
     }
 
