@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "Keycloak Admin-Cli",
+			"name": "Keycloak Admin With Password",
 			"item": [
 				{
 					"name": "Get Token for Admin-Cli (Password)",
@@ -17,9 +17,7 @@
 								"id": "61519dc9-a417-4105-bb05-76821b1d3a1b",
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);\r",
-									"postman.setEnvironmentVariable(\"token\", jsonData.access_token);\r",
-									"postman.setEnvironmentVariable(\"refresh_token\", jsonData.refresh_token);\r",
-									"postman.setEnvironmentVariable(\"id_token\", jsonData.id_token);"
+									"postman.setEnvironmentVariable(\"accessToken\", jsonData.access_token);"
 								],
 								"type": "text/javascript"
 							}
@@ -57,17 +55,9 @@
 							]
 						},
 						"url": {
-							"raw": "{{keycloak-url}}/auth/realms/{{keycloak-realm}}/protocol/openid-connect/token",
+							"raw": "{{tokenUrl}}",
 							"host": [
-								"{{keycloak-url}}"
-							],
-							"path": [
-								"auth",
-								"realms",
-								"{{keycloak-realm}}",
-								"protocol",
-								"openid-connect",
-								"token"
+								"{{tokenUrl}}"
 							]
 						}
 					},
@@ -84,7 +74,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{token}}",
+									"value": "{{accessToken}}",
 									"type": "string"
 								}
 							]
@@ -125,10 +115,32 @@
 					"response": []
 				}
 			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "2e65a87b-c24a-442d-a78a-15681bb39999",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "a4ea2d8f-fd1b-411c-aa81-54d731814899",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Client-App",
+			"name": "Keycloak Admin With Client-Credentials",
 			"item": [
 				{
 					"name": "Get Token for Client-App (Client-Credentials)",
@@ -139,9 +151,7 @@
 								"id": "9ea7cb99-5b76-415a-bbbb-8bc0cd2fa751",
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);\r",
-									"postman.setEnvironmentVariable(\"token\", jsonData.access_token);\r",
-									"postman.setEnvironmentVariable(\"refresh_token\", jsonData.refresh_token);\r",
-									"postman.setEnvironmentVariable(\"id_token\", jsonData.id_token);"
+									"postman.setEnvironmentVariable(\"accessToken\", jsonData.access_token);"
 								],
 								"type": "text/javascript"
 							}
@@ -174,17 +184,189 @@
 							]
 						},
 						"url": {
-							"raw": "{{keycloak-url}}/auth/realms/{{keycloak-realm}}/protocol/openid-connect/token",
+							"raw": "{{tokenUrl}}",
 							"host": [
-								"{{keycloak-url}}"
+								"{{tokenUrl}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users from Realm",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9090/auth/admin/realms/jhipster/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
 							],
+							"port": "9090",
 							"path": [
 								"auth",
+								"admin",
 								"realms",
-								"{{keycloak-realm}}",
-								"protocol",
-								"openid-connect",
-								"token"
+								"jhipster",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "9152ec16-0cd5-4cf7-ac16-94defce7d485",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "bafb9d4c-d8e0-4c42-9222-2a2d6257e08e",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Article-Service",
+			"item": [
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/articles/java-magazin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"articles",
+								"java-magazin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Neuer Titel\",\r\n    \"description\": \"Neue Beschreibung\",\r\n    \"body\": \"\",\r\n    \"tags\": [\"tag1\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/articles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"articles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Neuer Titel (Edit)\",\r\n    \"description\": \"Neue Beschreibung\",\r\n    \"body\": \"\",\r\n    \"tags\": [\"tag1\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/articles/neuer-titel",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"articles",
+								"neuer-titel"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/articles/neuer-titel",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"articles",
+								"neuer-titel"
 							]
 						}
 					},
@@ -194,102 +376,384 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Keycloak Web-App",
+			"name": "Comment-Service",
 			"item": [
 				{
-					"name": "Get Token for Web-App Client (Password)",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "6af82107-b531-498e-80b8-b5f34cea3fe8",
-								"exec": [
-									"var jsonData = JSON.parse(responseBody);\r",
-									"postman.setEnvironmentVariable(\"token\", jsonData.access_token);\r",
-									"postman.setEnvironmentVariable(\"refresh_token\", jsonData.refresh_token);\r",
-									"postman.setEnvironmentVariable(\"id_token\", jsonData.id_token);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
+					"name": "Get",
 					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
+						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "grant_type",
-									"value": "password",
-									"type": "text"
-								},
-								{
-									"key": "client_id",
-									"value": "web_app",
-									"type": "text"
-								},
-								{
-									"key": "username",
-									"value": "{{username}}",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "{{password}}",
-									"type": "text"
-								}
-							]
-						},
 						"url": {
-							"raw": "{{keycloak-url}}/auth/realms/{{keycloak-realm}}/protocol/openid-connect/token",
+							"raw": "localhost:8090/api/articles/entwickler-magazin/comments",
 							"host": [
-								"{{keycloak-url}}"
+								"localhost"
 							],
+							"port": "8090",
 							"path": [
-								"auth",
-								"realms",
-								"{{keycloak-realm}}",
-								"protocol",
-								"openid-connect",
-								"token"
+								"api",
+								"articles",
+								"entwickler-magazin",
+								"comments"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Get User Info",
+					"name": "Create",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"body\": \"Inhal vom Kommentar\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
-							]
+							}
 						},
-						"method": "GET",
+						"url": {
+							"raw": "localhost:8090/api/articles/entwickler-magazin/comments",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"articles",
+								"entwickler-magazin",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9090/auth/realms/jhipster/protocol/openid-connect/userinfo",
+							"raw": "localhost:8090/api/articles/entwickler-magazin/comments/5fac425164d66d408043975d",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"articles",
+								"entwickler-magazin",
+								"comments",
+								"5fac425164d66d408043975d"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "27146a5e-cb23-4f5f-a6ed-a846633c4846",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "9c7b7e18-cf7e-4c17-90f3-c95b5dab484a",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Favourite-Service",
+			"item": [
+				{
+					"name": "Favourite",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8070/api/articles/java-magazin/favourite",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "9090",
+							"port": "8070",
 							"path": [
-								"auth",
-								"realms",
-								"jhipster",
-								"protocol",
-								"openid-connect",
-								"userinfo"
+								"api",
+								"articles",
+								"java-magazin",
+								"favourite"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UnFavourite",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8070/api/articles/java-magazin/favourite",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8070",
+							"path": [
+								"api",
+								"articles",
+								"java-magazin",
+								"favourite"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Keycloak-Service",
+			"item": [
+				{
+					"name": "Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8040/api/keycloak/users",
+							"host": [
+								"localhost"
+							],
+							"port": "8040",
+							"path": [
+								"api",
+								"keycloak",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Users-Count",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8040/api/keycloak/users/count",
+							"host": [
+								"localhost"
+							],
+							"port": "8040",
+							"path": [
+								"api",
+								"keycloak",
+								"users",
+								"count"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Profile-Service",
+			"item": [
+				{
+					"name": "Get Profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8050/api/profiles",
+							"host": [
+								"localhost"
+							],
+							"port": "8050",
+							"path": [
+								"api",
+								"profiles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Profile",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Vorname\",\r\n    \"lastName\": \"Nachname\",\r\n    \"bio\": \"\",\r\n    \"imageUrl\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8050/api/profiles",
+							"host": [
+								"localhost"
+							],
+							"port": "8050",
+							"path": [
+								"api",
+								"profiles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Vorname (Edit)\",\r\n    \"lastName\": \"Nachname (Edit)\",\r\n    \"bio\": \"\",\r\n    \"imageUrl\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8050/api/profiles",
+							"host": [
+								"localhost"
+							],
+							"port": "8050",
+							"path": [
+								"api",
+								"profiles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Profile",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8050/api/profiles",
+							"host": [
+								"localhost"
+							],
+							"port": "8050",
+							"path": [
+								"api",
+								"profiles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Follow",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8050/api/profiles/follow/c4af4e2f-b432-4c3b-8405-cca86cd5b97b",
+							"host": [
+								"localhost"
+							],
+							"port": "8050",
+							"path": [
+								"api",
+								"profiles",
+								"follow",
+								"c4af4e2f-b432-4c3b-8405-cca86cd5b97b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unfollow",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8050/api/profiles/unfollow/c4af4e2f-b432-4c3b-8405-cca86cd5b97b",
+							"host": [
+								"localhost"
+							],
+							"port": "8050",
+							"path": [
+								"api",
+								"profiles",
+								"unfollow",
+								"c4af4e2f-b432-4c3b-8405-cca86cd5b97b"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "828d0dac-049f-4eae-9b5d-a6469999d396",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "e9f2b92b-e5ad-4359-bae9-e05ce8de8afa",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "User-Service",
+			"item": [
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8040/api/user",
+							"host": [
+								"localhost"
+							],
+							"port": "8040",
+							"path": [
+								"api",
+								"user"
 							]
 						}
 					},
@@ -300,16 +764,11 @@
 		}
 	],
 	"auth": {
-		"type": "basic",
-		"basic": [
+		"type": "oauth2",
+		"oauth2": [
 			{
-				"key": "password",
-				"value": "{{password}}",
-				"type": "string"
-			},
-			{
-				"key": "username",
-				"value": "{{username}}",
+				"key": "addTokenTo",
+				"value": "header",
 				"type": "string"
 			}
 		]
@@ -321,7 +780,40 @@
 				"id": "a315c9f3-d1d4-4359-8da2-644c034ca16f",
 				"type": "text/javascript",
 				"exec": [
-					""
+					"function getvar(variableName) {",
+					"    let value = pm.variables.get(variableName);",
+					"    if (!value) throw new Error(",
+					"        `Variable '${variableName}' is not defined. Do you forget to select an environment?`);",
+					"    return value;",
+					"}",
+					"",
+					"let tokenUrl = getvar('tokenUrl');",
+					"let clientId = getvar('username');",
+					"let clientSecret = getvar('password');",
+					"",
+					"let getTokenRequest = {",
+					"    method: 'POST',",
+					"    url: tokenUrl,   ",
+					"    body: {",
+					"        mode: 'urlencoded',",
+					"        urlencoded: [",
+					"            { key: 'grant_type', value: 'password' },",
+					"            { key: 'client_id', value: \"web_app\" },",
+					"            { key: \"username\", value: clientId },",
+					"            { key: \"password\", value: clientSecret }",
+					"        ]",
+					"    }",
+					"};",
+					"",
+					"pm.sendRequest(getTokenRequest, (err, response) => {",
+					"    let jsonResponse = response.json(),",
+					"        newAccessToken = jsonResponse.access_token;",
+					"",
+					"    console.log({ err, jsonResponse, newAccessToken })",
+					"",
+					"    pm.environment.set('accessToken', newAccessToken);",
+					"    pm.variables.set('accessToken', newAccessToken);",
+					"});"
 				]
 			}
 		},

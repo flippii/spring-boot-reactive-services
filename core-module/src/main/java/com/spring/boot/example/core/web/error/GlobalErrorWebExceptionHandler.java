@@ -1,6 +1,6 @@
 package com.spring.boot.example.core.web.error;
 
-import org.springframework.boot.autoconfigure.web.ResourceProperties;
+import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.reactive.error.ErrorAttributes;
@@ -31,7 +31,7 @@ public class GlobalErrorWebExceptionHandler extends AbstractErrorWebExceptionHan
                                           ApplicationContext applicationContext,
                                           ServerCodecConfigurer serverCodecConfigurer) {
 
-        super(errorAttributes, new ResourceProperties(), applicationContext);
+        super(errorAttributes, new WebProperties.Resources(), applicationContext);
         super.setMessageWriters(serverCodecConfigurer.getWriters());
         super.setMessageReaders(serverCodecConfigurer.getReaders());
     }
