@@ -23,6 +23,7 @@ public class FavouriteMongoListener extends AbstractDomainListener<Favourite, St
                 .eventType(EventType.ADDED)
                 .message(FavouriteEvent.Message
                         .builder()
+                        .articleId(document.getArticleId())
                         .userId(document.getUserId())
                         .build())
                 .build();

@@ -17,6 +17,7 @@ public class FavouriteEvent implements DomainEvent<String> {
     @Builder
     public static class Message {
 
+        private final String articleId;
         private final String userId;
 
     }

@@ -11,7 +11,7 @@ import java.time.Instant;
 @Accessors(chain = true)
 public class ProfileData {
 
-    private String id;
+    private String uid;
     private String firstName;
     private String lastName;
     private String bio;

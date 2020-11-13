@@ -2,8 +2,8 @@ package com.spring.boot.example.follow;
 
 import com.spring.boot.example.core.web.error.DocumentNotFoundException;
 import com.spring.boot.example.follow.model.FollowRelation;
-import com.spring.boot.example.profile.ProfileRepository;
-import com.spring.boot.example.profile.model.Profile;
+import com.spring.boot.example.profile.ProfileService;
+import com.spring.boot.example.profile.model.ProfileData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -20,45 +20,44 @@ import static reactor.core.publisher.Mono.error;
 public class FollowApiHandler {
 
     private final FollowService followService;
-    private final ProfileRepository profileRepository;
+    private final ProfileService profileService;
     private final FollowRepository followRepository;
 
     @NonNull
     public Mono<ServerResponse> follow(ServerRequest request) {
         String userId = request.pathVariable("userId");
 
-        Mono<Profile> userMono = profileRepository.findByUid(userId)
+        Mono<ProfileData> profileMono = profileService.findByUid(userId)
                 .zipWith(currentUserId())
                 .flatMap(tuple ->
                         followService.saveRelation(new FollowRelation(tuple.getT2(), tuple.getT1().getUid()))
-                                .then(profileRepository.findByUid(tuple.getT1().getUid()))
+                                .then(profileService.getByUid(tuple.getT1().getUid()))
                 )
                 .switchIfEmpty(handleUserNotFoundError(userId));
 
-        return readResponse(userMono, Profile.class);
+        return readResponse(profileMono, ProfileData.class);
     }
 
     @NonNull
     public Mono<ServerResponse> unfollow(ServerRequest request) {
         String userId = request.pathVariable("userId");
 
-        Mono<Profile> userMono = profileRepository.findByUid(userId)
+        Mono<ProfileData> profileMono = profileService.findByUid(userId)
                 .zipWith(currentUserId())
                 .flatMap(tuple ->
-                     followRepository.findByIdAndTargetId(tuple.getT2(), tuple.getT1().getId())
+                     followRepository.findByUserIdAndTargetId(tuple.getT2(), tuple.getT1().getUid())
                             .flatMap(followRelation ->
                                     followService.removeRelation(followRelation)
-                                        .then(profileRepository.findByUid(tuple.getT1().getId()))
+                                        .then(profileService.getByUid(tuple.getT1().getUid()))
                             )
-                            .switchIfEmpty(error(new DocumentNotFoundException("")))
                 )
                 .switchIfEmpty(handleUserNotFoundError(userId));
 
-        return readResponse(userMono, Profile.class);
+        return readResponse(profileMono, ProfileData.class);
     }
 
-    private Mono<Profile> handleUserNotFoundError(String userId) {
-        return error(new DocumentNotFoundException("User with id: " + userId + " not found."));
+    private Mono<ProfileData> handleUserNotFoundError(String userId) {
+        return error(new DocumentNotFoundException("Profile with uid: " + userId + " not found."));
     }
 
 }

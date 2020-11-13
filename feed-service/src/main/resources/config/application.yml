@@ -2,6 +2,7 @@ logging:
   level:
     root: INFO
     kafka.*: WARN
+    org.springframework.data: DEBUG
     org.springframework.*: INFO
     org.apache.kafka.*: WARN
 
@@ -18,6 +19,7 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017
       database: reactive-feed-service
+      auto-index-creation: true
   security:
     oauth2:
       resourceserver:

@@ -5,6 +5,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,14 +16,22 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @Document(collection = "article-favourite")
+@CompoundIndexes({
+        @CompoundIndex(name = "article-user-index", def = "{'articleId' : 1, 'userId': 1}")
+})
 public class Favourite extends AbstractDocument<String> {
 
-    @Indexed(name = "article.index")
+    @Id
     private String id;
+
+    @Indexed(name = "article.index")
+    private String articleId;
+
+    @Indexed(name = "user.index")
     private String userId;
 
-    public Favourite(String id, String userId) {
-        this.id = id;
+    public Favourite(String articleId, String userId) {
+        this.articleId = articleId;
         this.userId = userId;
     }
 

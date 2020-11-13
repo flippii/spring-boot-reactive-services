@@ -2,8 +2,10 @@ logging:
   level:
     root: INFO
     kafka.*: WARN
+    org.springframework.data: DEBUG
     org.springframework.*: INFO
     org.apache.kafka.*: WARN
+
 
 server:
   port: 8050

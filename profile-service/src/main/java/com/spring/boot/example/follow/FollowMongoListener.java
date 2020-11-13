@@ -23,6 +23,7 @@ public class FollowMongoListener extends AbstractDomainListener<FollowRelation, 
                 .eventType(EventType.ADDED)
                 .message(FollowRelationEvent.Message
                         .builder()
+                        .userId(document.getUserId())
                         .targetId(document.getTargetId())
                         .build())
                 .build();

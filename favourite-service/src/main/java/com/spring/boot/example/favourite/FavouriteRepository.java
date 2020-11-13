@@ -6,6 +6,6 @@ import reactor.core.publisher.Mono;
 
 public interface FavouriteRepository extends ReactiveMongoRepository<Favourite, String> {
 
-    Mono<Favourite> findByIdAndUserId(String articleId, String userId);
+    Mono<Favourite> findByArticleIdAndUserId(String articleId, String userId);
 
 }

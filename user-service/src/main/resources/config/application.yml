@@ -1,6 +1,7 @@
 logging:
   level:
     root: INFO
+    org.springframework.data: DEBUG
     org.springframework.*: INFO
 
 server:
@@ -16,6 +17,7 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017
       database: reactive-user-service
+      auto-index-creation: true
   security:
     oauth2:
       resourceserver:
@@ -29,3 +31,6 @@ spring:
           oidc:
             client-id: web_app
             client-secret: web_app
+  jackson:
+    deserialization:
+      FAIL_ON_UNKNOWN_PROPERTIES: false

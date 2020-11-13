@@ -16,16 +16,15 @@ public class FavouriteService {
     private final FavouriteRepository favouriteRepository;
 
     public Mono<Favourite> favourite(Favourite favourite) {
-        return favouriteRepository.findByIdAndUserId(favourite.getId(), favourite.getUserId())
+        return favouriteRepository.findByArticleIdAndUserId(favourite.getArticleId(), favourite.getUserId())
                 .switchIfEmpty(favouriteRepository.save(favourite));
     }
 
     public Mono<Favourite> unFavourite(String articleId, String uid) {
-        return favouriteRepository.findByIdAndUserId(articleId, uid)
+        return favouriteRepository.findByArticleIdAndUserId(articleId, uid)
                 .switchIfEmpty(error(new DocumentNotFoundException("Favourite with articleId: " + articleId + " not found.")))
                 .flatMap(favourite ->
-                        favouriteRepository.delete(favourite)
-                                .then(just(favourite))
+                        favouriteRepository.delete(favourite).then(just(favourite))
                 );
     }
 

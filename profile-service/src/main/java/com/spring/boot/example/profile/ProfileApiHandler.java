@@ -33,7 +33,7 @@ public class ProfileApiHandler {
     public Mono<ServerResponse> profile(ServerRequest request) {
         Mono<ProfileData> profileMono = currentUserId()
                 .flatMap(uid ->
-                        profileService.getById(uid)
+                        profileService.getByUid(uid)
                                 .switchIfEmpty(error(new DocumentNotFoundException("Profile with uid \"" + uid + "\" not found.")))
                 );
 

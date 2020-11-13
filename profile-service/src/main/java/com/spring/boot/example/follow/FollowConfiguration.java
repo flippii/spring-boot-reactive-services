@@ -22,11 +22,11 @@ public class FollowConfiguration {
     public RouterFunction<?> followRoutes() {
         RouterFunction<ServerResponse> json = route()
                 .nest(accept(APPLICATION_JSON), builder -> builder
-                        .GET("/follow/{userId}", followApiHandler::follow)
-                        .GET("/unfollow/{userId}", followApiHandler::unfollow))
+                        .POST("/follow/{userId}", followApiHandler::follow)
+                        .DELETE("/unfollow/{userId}", followApiHandler::unfollow))
                 .build();
 
-        return route().path("/api/users", () -> json)
+        return route().path("/api/profiles", () -> json)
                 .build();
     }
 

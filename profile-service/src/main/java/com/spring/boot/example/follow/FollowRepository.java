@@ -6,6 +6,6 @@ import reactor.core.publisher.Mono;
 
 public interface FollowRepository extends ReactiveMongoRepository<FollowRelation, String> {
 
-    Mono<FollowRelation> findByIdAndTargetId(String id, String targetId);
+    Mono<FollowRelation> findByUserIdAndTargetId(String userId, String targetId);
 
 }

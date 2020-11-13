@@ -17,11 +17,11 @@ public class ProfileService {
     private final ProfileRepository profileRepository;
     private final FollowRepository followRepository;
 
-    public Mono<ProfileData> getById(String uid) {
+    public Mono<ProfileData> getByUid(String uid) {
         return profileRepository.findByUid(uid)
                 .map(profile ->
                         new ProfileData()
-                                .setId(profile.getId())
+                                .setUid(profile.getUid())
                                 .setFirstName(profile.getFirstName())
                                 .setLastName(profile.getLastName())
                                 .setImageUrl(profile.getImageUrl())
@@ -32,6 +32,10 @@ public class ProfileService {
                                 .doOnSuccess(followRelation -> profileData.setFollowing(followRelation != null))
                                 .then(just(profileData))
                 );
+    }
+
+    public Mono<Profile> findByUid(String uid) {
+        return profileRepository.findByUid(uid);
     }
 
     public Mono<Profile> create(String uid, ProfileParams profileParams) {
