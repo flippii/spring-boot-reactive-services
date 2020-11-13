@@ -16,7 +16,7 @@ import static com.spring.boot.example.security.ReactiveSecurityContextUtils.curr
 @RequiredArgsConstructor
 public class FeedApiHandler {
 
-    private final FeedServie feedServie;
+    private final FeedService feedServie;
 
     @NonNull
     public Mono<ServerResponse> feed(ServerRequest request) {

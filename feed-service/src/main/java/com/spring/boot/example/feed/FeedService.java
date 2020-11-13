@@ -7,7 +7,7 @@ import reactor.core.publisher.Flux;
 
 @Service
 @RequiredArgsConstructor
-public class FeedServie {
+public class FeedService {
 
     //TODO: Profil daten per web client
     public Flux<FeedData> getUserFeed(String uid) {

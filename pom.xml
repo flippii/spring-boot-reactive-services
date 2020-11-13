@@ -36,6 +36,7 @@
         <module>keycloak-service</module>
         <module>profile-service</module>
         <module>user-service</module>
+        <module>reactive-proxy</module>
     </modules>
 
     <dependencyManagement>

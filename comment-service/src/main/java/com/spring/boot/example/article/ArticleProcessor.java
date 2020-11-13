@@ -9,6 +9,8 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 
+import static reactor.core.publisher.Mono.just;
+
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
@@ -30,14 +32,25 @@ public class ArticleProcessor {
     }
 
     private void addArticle(ArticleEvent event) {
-        articleRepository.save(new Article(event.getId(), event.getMessage().getSlug()))
+        articleRepository.findById(event.getId())
+                .switchIfEmpty(
+                        just(new Article()
+                                .setId(event.getId()))
+                )
+                .flatMap(article -> {
+                        article
+                                .setSlug(event.getMessage().getSlug());
+
+                        return articleRepository.save(article);
+                })
                 .doOnSuccess(article -> log.trace("Article with id: {} saved.", article.getId()))
                 .doOnError(ex -> log.error("Article with id: {} not saved.", event.getId(), ex))
                 .subscribe();
     }
 
     private void deleteArticle(ArticleEvent event) {
-        articleRepository.deleteById(event.getId())
+        articleRepository.findById(event.getId())
+                .flatMap(articleRepository::delete)
                 .doOnSuccess(article -> log.trace("Article with id: {} deleted.", event.getId()))
                 .doOnError(ex -> log.error("Article with id: {} not deleted.", event.getId(), ex))
                 .subscribe();
