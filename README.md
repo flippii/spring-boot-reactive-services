@@ -30,3 +30,4 @@ Then run every Spring Boot app.
 * ReactiveUserDetailsPasswordService -> Wo init. wird es ind er Auto Configuration?
 * JWT Token ist abgelaufen - Exception nicht zusätzlich tum Token invalid Header 
 * Prüfung das beim Löschen von Datensätzen auch Abhängige Services alles löschen
+* Properties - Bean validation

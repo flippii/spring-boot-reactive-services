@@ -3,9 +3,9 @@ package com.spring.boot.example.follow.model;
 import com.spring.boot.example.core.domain.AbstractDocument;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @Document(collection = "user-follow")
@@ -21,7 +22,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 })
 public class FollowRelation extends AbstractDocument<String> {
 
-    @Id
+    @Indexed
     private String id;
 
     @Indexed(name = "user.index")
@@ -29,10 +30,5 @@ public class FollowRelation extends AbstractDocument<String> {
 
     @Indexed(name = "target.index")
     private String targetId;
-
-    public FollowRelation(String userId, String targetId) {
-        this.userId = userId;
-        this.targetId = targetId;
-    }
 
 }
