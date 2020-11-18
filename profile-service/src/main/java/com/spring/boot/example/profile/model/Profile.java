@@ -22,7 +22,7 @@ public class Profile extends AbstractDocument<String> {
     @Id
     private String id;
 
-    @Indexed(unique = true, name = "uid.index")
+    @Indexed(name = "uid-index", unique = true)
     private String uid;
     private String firstName;
     private String lastName;

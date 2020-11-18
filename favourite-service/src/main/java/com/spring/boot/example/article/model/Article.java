@@ -17,7 +17,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "articles")
 public class Article extends AbstractDocument<String> {
 
-    @Indexed
+    @Indexed(name = "id-index", unique = true)
     private String id;
 
     @Indexed(name = "slug-index", unique = true)

@@ -35,15 +35,15 @@ spring:
           destination: favourite
           group: favourite-group
           contentType: 'application/json'
-            consumer:
-              concurrency: 1
+          consumer:
+            concurrency: 1
         follow:
           binder: kafka
           destination: follow
           group: follow-group
           contentType: 'application/json'
-            consumer:
-              concurrency: 1
+          consumer:
+            concurrency: 1
       kafka:
         binder:
           brokers:

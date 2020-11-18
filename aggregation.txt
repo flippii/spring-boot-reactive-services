@@ -1,0 +1,41 @@
+db
+.getCollection('articles')
+.find({ slug: { $in: [ "javascript-magazin", "java-magazin" ] }})
+
+db
+.getCollection('article-favourite')
+.aggregate([
+  { $match: { userId: "4c973896-5761-41fc-8217-07c5d13a004b" } },
+  { $lookup: {
+      from: "articles",
+      localField: "articleId",
+      foreignField: "articleId",
+      as: "article"
+    }
+  },
+  { $project: {
+      articleId: "$articleId",
+      userId: "$userId",
+      article: { $arrayElemAt: [ "$article", 0 ] }
+    }
+  }
+])
+
+db
+.getCollection('article-favourite')
+.aggregate([
+  { $match: { userId: "4c973896-5761-41fc-8217-07c5d13a004b" } },
+  { $lookup: {
+      from: "articles",
+      localField: "articleId",
+      foreignField: "articleId",
+      as: "article"
+    }
+  },
+  { $unwind: {
+      path: "$article", preserveNullAndEmptyArrays: true
+    }
+  }
+])
+
+https://stackoverflow.com/questions/37691727/how-to-use-mongodbs-aggregate-lookup-as-findone

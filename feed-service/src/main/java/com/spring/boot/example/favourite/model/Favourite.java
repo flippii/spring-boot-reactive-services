@@ -18,17 +18,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @EqualsAndHashCode(callSuper = true)
 @Document(collection = "article-favourite")
 @CompoundIndexes({
-        @CompoundIndex(name = "article-user-index", def = "{'articleId' : 1, 'userId': 1}")
+        @CompoundIndex(name = "article-user-index", def = "{'articleId' : 1, 'userId': 1}", unique = true)
 })
 public class Favourite extends AbstractDocument<String> {
 
-    @Indexed
+    @Indexed(name = "id-index", unique = true)
     private String id;
-
-    @Indexed(name = "article.index")
     private String articleId;
-
-    @Indexed(name = "user.index")
     private String userId;
 
 }

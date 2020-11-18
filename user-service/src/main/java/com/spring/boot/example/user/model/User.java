@@ -8,6 +8,7 @@ import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -22,6 +23,8 @@ public class User extends AbstractDocument<String> {
 
     @Id
     private String id;
+
+    @Indexed(name = "uid-index", unique = true)
     private String uid;
     private String firstName;
     private String lastName;

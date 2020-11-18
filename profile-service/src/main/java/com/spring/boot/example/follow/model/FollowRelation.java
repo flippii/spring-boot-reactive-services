@@ -8,7 +8,6 @@ import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
@@ -17,17 +16,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @EqualsAndHashCode(callSuper = true)
 @Document(collection = "user-follow")
 @CompoundIndexes({
-        @CompoundIndex(name = "user-target-index", def = "{'userId' : 1, 'targetId': 1}")
+        @CompoundIndex(name = "user-target-index", def = "{'userId' : 1, 'targetId': 1}", unique = true)
 })
 public class FollowRelation extends AbstractDocument<String> {
 
     @Id
     private String id;
-
-    @Indexed(name = "user.index")
     private String userId;
-
-    @Indexed(name = "target.index")
     private String targetId;
 
     public FollowRelation(String userId, String targetId) {

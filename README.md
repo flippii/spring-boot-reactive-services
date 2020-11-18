@@ -31,3 +31,4 @@ Then run every Spring Boot app.
 * JWT Token ist abgelaufen - Exception nicht zusätzlich tum Token invalid Header 
 * Prüfung das beim Löschen von Datensätzen auch Abhängige Services alles löschen
 * Properties - Bean validation
+*Article Slug über Kafka nicht al Identifier

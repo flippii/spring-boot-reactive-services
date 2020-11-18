@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
@@ -16,7 +17,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "articles")
 public class Article extends AbstractDocument<String> {
 
+    //TODO: add field articleId and id with @Id
+
+    @Indexed(name = "id-index", unique = true)
     private String id;
+
+    @Indexed(name = "slug-index", unique = true)
     private String slug;
 
 }
