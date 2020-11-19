@@ -8,7 +8,6 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
@@ -22,9 +21,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 })
 public class FollowRelation extends AbstractDocument<String> {
 
-    @Indexed(name = "id-index", unique = true)
     private String id;
     private String userId;
     private String targetId;
+
+    public FollowRelation(String userId, String targetId) {
+        this.userId = userId;
+        this.targetId = targetId;
+    }
 
 }

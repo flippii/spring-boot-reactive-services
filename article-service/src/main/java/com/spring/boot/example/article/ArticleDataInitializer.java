@@ -4,7 +4,6 @@ import com.spring.boot.example.article.model.Article;
 import com.spring.boot.example.article.model.Tag;
 import com.spring.boot.example.core.initializer.DataInitializer;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
@@ -12,7 +11,6 @@ import java.util.Arrays;
 
 import static java.util.stream.Collectors.toSet;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class ArticleDataInitializer implements DataInitializer {

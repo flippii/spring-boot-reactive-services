@@ -39,3 +39,78 @@ db
 ])
 
 https://stackoverflow.com/questions/37691727/how-to-use-mongodbs-aggregate-lookup-as-findone
+
+Stand der Impl.
+
+db
+.getCollection('user-follow')
+.aggregate([
+  { $match: { userId: "1" } },
+  { $lookup: {
+      from: "article-favourite",
+      localField: "targetId",
+      foreignField: "userId",
+      as: "favourites"
+    }
+  },
+  { $unwind: { path: "$favourites", preserveNullAndEmptyArrays: true } },
+  { $project: {
+      userId: "$userId",
+      targetId: "$targetId",
+      articleId: "$favourites.articleId"
+    }
+  },
+  { $match: { articleId: { $ne: null } } },
+  { $lookup: {
+      from: "articles",
+      localField: "articleId",
+      foreignField: "articleId",
+      as: "articles"
+    }
+  },
+  { $addFields: { articleSize: { $size: '$articles' } } },
+  { $match: { articleSize: { $gte: 1 } } },
+  { $unwind: { path: "$articles", preserveNullAndEmptyArrays: true } },
+  { $lookup: {
+      from: "article-favourite",
+      localField: "articleId",
+      foreignField: "articleId",
+      as: "favourite-count"
+    }
+  },
+  { $lookup: {
+      from: "article-favourite",
+      localField: "userId",
+      foreignField: "userId",
+      as: "user-favourites"
+    }
+  },
+  { $addFields: {
+      filteredUserFavourites: {
+        $filter: {
+          input: "$user-favourites",
+          as: "userFavourite",
+          cond: { $eq: [ '$$userFavourite.articleId', '$articles.articleId' ] }
+        }
+      }
+    }
+  },
+  { $lookup: {
+        from: "user-follow",
+        localField: "userId",
+        foreignField: "targetId",
+        as: "target-follow"
+      }
+  },
+  { $project: {
+      userId: "$userId",
+      targetId: "$targetId",
+      articleId: "$articles.articleId",
+      article: "$articles",
+      favouriteCount: { $size: "$favourite-count" },
+      isFavourite: { $size: "$filteredUserFavourites" },
+      targetFollow: "$target-follow",
+      isFollowingAuthors: "1"
+    }
+  }
+])

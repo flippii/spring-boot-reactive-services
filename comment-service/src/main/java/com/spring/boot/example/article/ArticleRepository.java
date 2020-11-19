@@ -6,6 +6,8 @@ import reactor.core.publisher.Mono;
 
 public interface ArticleRepository extends ReactiveMongoRepository<Article, String> {
 
+    Mono<Article> findByArticleId(String articleId);
+
     Mono<Article> findBySlug(String slug);
 
 }

@@ -32,10 +32,10 @@ public class ArticleProcessor {
     }
 
     private void addArticle(ArticleEvent event) {
-        articleRepository.findById(event.getId())
+        articleRepository.findByArticleId(event.getId())
                 .switchIfEmpty(
                         just(new Article()
-                                .setId(event.getId()))
+                                .setArticleId(event.getId()))
                 )
                 .flatMap(article -> {
                      article.setSlug(event.getMessage().getSlug())
@@ -51,7 +51,7 @@ public class ArticleProcessor {
     }
 
     private void deleteArticle(ArticleEvent event) {
-        articleRepository.findById(event.getId())
+        articleRepository.findByArticleId(event.getId())
                 .flatMap(articleRepository::delete)
                 .doOnSuccess(article -> log.trace("Article with id: {} deleted.", event.getId()))
                 .doOnError(ex -> log.error("Article with id: {} not deleted.", event.getId(), ex))
