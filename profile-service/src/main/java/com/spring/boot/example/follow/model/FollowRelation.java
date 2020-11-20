@@ -23,6 +23,7 @@ public class FollowRelation extends AbstractDocument<String> {
     @Id
     private String id;
     private String userId;
+    //TODO: rename followId an move for userId
     private String targetId;
 
     public FollowRelation(String userId, String targetId) {

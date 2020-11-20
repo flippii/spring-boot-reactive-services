@@ -95,22 +95,56 @@ db
       }
     }
   },
+  {
+    $addFields: {
+      "articles.favouriteCount": { $size: "$favourite-count" },
+      "articles.isFavourite": { $size: "$filteredUserFavourites" }
+    }
+  },
+  {
+    $group: {
+       _id: { userId: "$userId", targetId: "$targetId" },
+       articles: { $push: "$articles" },
+       targetIds: { $push: "$targetId"  }
+    }
+  },
+  { $unwind: { path: "$articles", preserveNullAndEmptyArrays: true } },
   { $lookup: {
-        from: "user-follow",
-        localField: "userId",
-        foreignField: "targetId",
-        as: "target-follow"
-      }
+      from: "user-follow",
+      let: { user_id: "$_id.userId", target_ids: "$targetIds" },
+      pipeline: [
+          { $match:
+             { $expr:
+                { $and:
+                   [
+                     { $eq: [ "$userId",  "$$user_id" ] },
+                     { $in: [ "$targetId", "$$target_ids" ] }
+                   ]
+                }
+             }
+          }
+      ],
+      as: "followsAuthor"
+    }
+  },
+  {
+    $addFields: {
+      "articles.isFollowsAuthor": { $size: "$followsAuthor" }
+    }
   },
   { $project: {
-      userId: "$userId",
-      targetId: "$targetId",
+      _id: "$articles._id",
+      userId: "$_id.userId",
+      targetId: "$_id.targetId",
       articleId: "$articles.articleId",
-      article: "$articles",
-      favouriteCount: { $size: "$favourite-count" },
-      isFavourite: { $size: "$filteredUserFavourites" },
-      targetFollow: "$target-follow",
-      isFollowingAuthors: "1"
+      slug: "$articles.slug",
+      title: "$articles.title",
+      description: "$articles.description",
+      body: "$articles.body",
+      tags: "$articles.tags",
+      favouriteCount: "$articles.favouriteCount",
+      isFavourite: "$articles.isFavourite",
+      isFollowsAuthor: "$articles.isFollowsAuthor",
     }
   }
 ])
