@@ -14,7 +14,9 @@ import java.util.List;
 public class FeedData {
 
     private String id;
-    private String slug;
+    private String userId;
+    private String followId;
+    /*private String slug;
     private String title;
     private String description;
     private String body;
@@ -25,6 +27,6 @@ public class FeedData {
     private List<String> tagList;
 
     @JsonProperty("author")
-    private ProfileData profileData;
+    private ProfileData profileData;*/
 
 }

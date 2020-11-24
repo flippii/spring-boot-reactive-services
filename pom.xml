@@ -37,6 +37,7 @@
         <module>profile-service</module>
         <module>user-service</module>
         <module>reactive-proxy</module>
+        <module>admin</module>
     </modules>
 
     <dependencyManagement>
