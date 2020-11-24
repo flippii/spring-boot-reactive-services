@@ -38,7 +38,7 @@ public class FollowProcessor {
                                 .setId(event.getId()))
                 )
                 .flatMap(followRelation -> {
-                    followRelation.setTargetId(event.getMessage().getTargetId())
+                    followRelation.setFollowId(event.getMessage().getFollowId())
                             .setUserId(event.getMessage().getUserId());
 
                     return followRepository.save(followRelation);

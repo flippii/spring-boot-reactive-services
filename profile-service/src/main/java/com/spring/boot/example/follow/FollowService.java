@@ -12,7 +12,7 @@ public class FollowService {
     private final FollowRepository followRepository;
 
     public Mono<FollowRelation> saveRelation(FollowRelation followRelation) {
-        return followRepository.findByUserIdAndTargetId(followRelation.getUserId(), followRelation.getTargetId())
+        return followRepository.findByUserIdAndFollowId(followRelation.getUserId(), followRelation.getFollowId())
                 .switchIfEmpty(followRepository.save(followRelation));
     }
 

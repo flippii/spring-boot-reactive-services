@@ -17,17 +17,17 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @EqualsAndHashCode(callSuper = true)
 @Document(collection = "user-follow")
 @CompoundIndexes({
-        @CompoundIndex(name = "user-target-index", def = "{'userId' : 1, 'targetId': 1}", unique = true)
+        @CompoundIndex(name = "user-follow-index", def = "{'userId' : 1, 'followId': 1}", unique = true)
 })
 public class FollowRelation extends AbstractDocument<String> {
 
     private String id;
     private String userId;
-    private String targetId;
+    private String followId;
 
-    public FollowRelation(String userId, String targetId) {
+    public FollowRelation(String userId, String followId) {
         this.userId = userId;
-        this.targetId = targetId;
+        this.followId = followId;
     }
 
 }

@@ -21,7 +21,7 @@ public class FollowRelationEvent implements DomainEvent<String> {
     public static class Message {
 
         private final String userId;
-        private final String targetId;
+        private final String followId;
 
     }
 

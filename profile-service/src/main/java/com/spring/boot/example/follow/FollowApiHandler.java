@@ -45,7 +45,7 @@ public class FollowApiHandler {
         Mono<ProfileData> profileMono = profileService.findByUid(userId)
                 .zipWith(currentUserId())
                 .flatMap(tuple ->
-                     followRepository.findByUserIdAndTargetId(tuple.getT2(), tuple.getT1().getUid())
+                     followRepository.findByUserIdAndFollowId(tuple.getT2(), tuple.getT1().getUid())
                             .flatMap(followRelation ->
                                     followService.removeRelation(followRelation)
                                         .then(profileService.getByUid(tuple.getT1().getUid()))
