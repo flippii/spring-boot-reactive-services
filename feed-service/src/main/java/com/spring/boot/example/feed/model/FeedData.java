@@ -16,6 +16,7 @@ public class FeedData {
     private String id;
     private String userId;
     private String followId;
+    private String articleId;
     /*private String slug;
     private String title;
     private String description;
