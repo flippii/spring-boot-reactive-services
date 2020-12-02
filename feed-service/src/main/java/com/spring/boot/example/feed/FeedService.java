@@ -17,7 +17,7 @@ public class FeedService {
     private final ReactiveMongoTemplate mongoTemplate;
 
     public Flux<FeedData> getUserFeed(String uid) {
-        LookupOperation lookup = LookupOperation.newLookup()
+        LookupOperation favouriteLookup = LookupOperation.newLookup()
                 .from("article-favourite")
                 .localField("followId")
                 .foreignField("userId")
@@ -28,12 +28,33 @@ public class FeedService {
                         Fields.field("articleId", "$favourite.articleId")
                 ));
 
+        LookupOperation articleLookup = LookupOperation.newLookup()
+                .from("articles")
+                .localField("articleId")
+                .foreignField("articleId")
+                .as("article");
+
+        AddFieldsOperation addFields = Aggregation.addFields()
+                .addFieldWithValueOf("articleSize", ArrayOperators.arrayOf("article").length())
+                .build();
+
+        LookupOperation articleFavouriteLookup = LookupOperation.newLookup()
+                .from("article-favourite")
+                .localField("articleId")
+                .foreignField("articleId")
+                .as("articleFavourite");
+
         Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.match(new Criteria("userId").is(uid)),
-                lookup,
+                favouriteLookup,
                 Aggregation.unwind("favourite", true),
                 project,
                 Aggregation.match(new Criteria("articleId").ne(null)),
+                articleLookup,
+                addFields,
+                Aggregation.match(new Criteria("articleSize").gte(1)),
+                Aggregation.unwind("article", true),
+                articleFavouriteLookup,
                 Aggregation.sort(ASC, "articleId")
         );
 

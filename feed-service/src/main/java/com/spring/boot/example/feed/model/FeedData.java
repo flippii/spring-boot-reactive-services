@@ -1,12 +1,10 @@
 package com.spring.boot.example.feed.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -17,6 +15,9 @@ public class FeedData {
     private String userId;
     private String followId;
     private String articleId;
+    private ArticleData article;
+    private int articleSize;
+    private Set<FavouriteData> articleFavourite;
     /*private String slug;
     private String title;
     private String description;
